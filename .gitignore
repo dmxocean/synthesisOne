@@ -1,0 +1,15 @@
+# Exclude specific files
+*.log
+
+
+# Exclude specifc directories
+tests/
+
+
+# Exclude files from operative systems
+.DS_Store
+
+# Exclude files from IDEs
+.idea/
+.vscode/
+
