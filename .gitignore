@@ -1,6 +1,7 @@
 # Exclude specific files
 *.log
-
+*.xlsx
+*.docx
 
 # Exclude specifc directories
 tests/
