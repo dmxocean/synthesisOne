@@ -5,6 +5,9 @@
 
 # Exclude specifc directories
 tests/
+sandbox/
+.private/
+.secrets/
 
 
 # Exclude files from operative systems
