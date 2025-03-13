@@ -25,6 +25,13 @@ For example: a specific translator may be prioritized for a certain company.
 4. Is final quality given by the client or how is it done, if not can the clients give feedback in some why, if so what is it.
 
 
+5. In Task type: "Translation" it's stated that if the "ProofReading" is done by a superior the quality can be slightly lower.
+  5.1. Can you define "superior" and "slighly lower"
+  5.2 Do ALL "Translation" type tasks have "ProofReading" or "SpotCheck" tasks asigned after them?
+6. Are "SpotCheck" and "ProofReading" tasks ONLY asigned in tandem with "Translation" or "PostEditing" tasks? Or can they be asigned by themselves.
+
+    
+
 ## Answers 
 
 1.2.3. Answers:
