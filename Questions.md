@@ -29,6 +29,9 @@ For example: a specific translator may be prioritized for a certain company.
   5.1. Can you define "superior" and "slighly lower"
   5.2 Do ALL "Translation" type tasks have "ProofReading" or "SpotCheck" tasks asigned after them?
 6. Are "SpotCheck" and "ProofReading" tasks ONLY asigned in tandem with "Translation" or "PostEditing" tasks? Or can they be asigned by themselves.
+7. Can "ProofReading" tasks apply to multiple translation tasks? If so how do we know which?
+8. The translator specialties are implicit, not explicit, right? As in: a translator specializes in something by having worked a lot on that
+9. How important is the rule of "The translator’s quality can be slightly lower if the ProofReading is done by a superior." for "Translation" tasks.
 
     
 
@@ -36,4 +39,14 @@ For example: a specific translator may be prioritized for a certain company.
 
 1.2.3. Answers:
 Put the questions in the presentation so we can ask them directly.
+
+
+
+# Questions for us (the group itself)
+
+1. How do we plan on taking into account specialities for SAT?
+
+It's a bit dirty but we could create a column for every Group/Industry/Subindustry on the translators' page that just keeps track of how many times each translator has "worked" for each industry. Problem: We/They would also need to create an update loop everytime a task is assigned.
+
+
  
