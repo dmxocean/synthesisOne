@@ -1,62 +1,57 @@
-# In Scope (Specific Input/Output, to show the client)
+# In Scope
 
-## Inputs:
+## Inputs
 1. Start Time
 2. Deadline
-3. Source Lang
-4. Target Lang
+3. Source Language
+4. Target Language
 5. Task Type
 6. Company/Client Name
 7. Multi-Task Input
 
-
-
-## Outputs:
-
-1. A list of ALL translators in as spredsheet style
-2. One page specifically for those that match
-3. Another for the ones that don't
-4. "(X) Wildcard was used" warning, if it applies 
-5. The first columns show each translator's:
-  1. Average Quality
-  2. Hourly Rate
-5. The other columns show a yes or no if:
-  1. Original Language Matches?
-  2. Target Language Matches?
-  3. Schedual Matches?
-  4. Hourly Rate Matches?
-  5. Average Quality Matches?
-6. The columns will be ordered as follows:
-  1. Recomended Matches   
-  2. Increasing Hourly Rate
-  3. Decreasing Quality
-7. The spreadsheed pages' columns can be clicked to prioritize that element in the ordering.    
-8. The machine recomended translator will be highlighted
-9. Multi-Task Output
+## Outputs
+1. Comprehensive spreadsheet listing all translators
+2. Dedicated page for translators meeting criteria
+3. Separate page for translators not meeting criteria
+4. Notification: "(X) Wildcard was used," if applicable
+5. Initial columns per translator:
+   - Average Quality
+   - Hourly Rate
+6. Additional columns with Yes/No indicators:
+   - Source Language Match
+   - Target Language Match
+   - Schedule Match
+   - Hourly Rate Match
+   - Average Quality Match
+7. Default column sort order:
+   - Recommended Matches
+   - Ascending Hourly Rate
+   - Descending Quality
+8. Interactive columns clickable for custom sort prioritization
+9. Machine-recommended translator highlighted
+10. Multi-Task Output
 
 # Out of Scope
 
-## Inputs:
-1. Inputting a company that's not in the database yet
-2. Inputting a translator that's not in the database yet
-3. 
+## Inputs
+1. New company not yet in database
+2. New translator not yet in database
 
-## Outputs:
-
-1. Automatic assignment of translators (instead of a recomendation with human input)
-2. Manual override for the automatic assignment
+## Outputs
+1. Automatic translator assignment
+2. Manual override for assignments
 
 # Target Quality
+To Be Determined (TBD)
 
+# Potential Risks
 
-# Potential Risks 
-## While making the product
-Trying to do too much and going nowhere
+## Development Phase
+- Overambition resulting in delayed progress
 
-## Of the final product
-Wrong SAT "rules"
-No valid translator fits the rules, what does the program do?
-
+## Final Product
+- Incorrect implementation of SAT rules
+- No translators meet criteria; system response undefined
 
 # Needed Resources
-
+To Be Determined (TBD)
