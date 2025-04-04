@@ -24,6 +24,7 @@
 7. Can "ProofReading" tasks apply to multiple translation tasks? If so, how do we know which?  
 8. The translator specialties are implicit, not explicit, right? As in: a translator specializes in something by having worked a lot on that.  
 9. How important is the rule of "The translator’s quality can be slightly lower if the ProofReading is done by a superior" for "Translation" tasks?
+10. Is there a more consistent way to identify translators? now we do by name but that creates potentiall issues
 
 ## Answers
 
