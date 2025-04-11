@@ -25,6 +25,8 @@ tests/
 sandbox/
 .private/
 .secrets/
+data/interim/**/*.csv
+data/processed/**/*.csv
 
 # Operating system files
 .DS_Store
