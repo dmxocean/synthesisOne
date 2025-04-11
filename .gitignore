@@ -1,19 +1,44 @@
-# Exclude specific files
-*.log
-*.xlsx
-*.docx
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
 
-# Exclude specifc directories
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+.env/
+
+# Data files
+*.log
+*.docx
+*.sqlite
+*.db
+
+# Exclude specific directories
 tests/
 sandbox/
 .private/
 .secrets/
 
-
-# Exclude files from operative systems
+# Operating system files
 .DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
 
-# Exclude files from IDEs
+# IDE files
 .idea/
 .vscode/
+*.sublime-project
+*.sublime-workspace
+.project
+.pydevproject
 
+# Jupyter Notebook
+.ipynb_checkpoints
