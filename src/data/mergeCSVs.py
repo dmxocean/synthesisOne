@@ -158,8 +158,8 @@ else:
 rows_deletion = rows_deletion.drop_duplicates()
 rows_before_total = len(df_data)
 
-df_data_cleaned = df_data.dropna(subset=data_key_columns)
-rows_after_total = len(df_data_cleaned)
+df_data.dropna(inplace=True)
+rows_after_total = len(df_data)
 
 deletion_total = rows_before_total - rows_after_total
 
@@ -197,7 +197,6 @@ if len(rows_to_remove_clients) > 0:
     
     main_logger.info(f"Removed {clients_removed} rows with missing values from clients.csv")
 
-df_data = df_data_cleaned
 main_logger.info(f"\nSample of data.csv (after cleaning): \n\n{df_data.head().to_string()}\n")
 
 # Logger for the translator merge
