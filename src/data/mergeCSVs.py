@@ -155,7 +155,7 @@ else:
     main_logger.info("")
 
 # Get all rows that need to be removed from data.csv
-rows_deletion = rows_deletion.drop_duplicates()
+df_data = df_data.drop_duplicates()
 rows_before_total = len(df_data)
 
 # Drop rows with missing values
@@ -164,13 +164,12 @@ rows_after_total = len(df_data)
 
 # Calculate the number of rows removed due to missing values
 deletion_total = rows_before_total - rows_after_total
-
 main_logger.info(f"Removed {deletion_total} rows with missing values from data.csv")
 main_logger.info(f"Remaining rows after cleaning: {rows_after_total} ({(rows_after_total/rows_before_total)*100:.5f}% of original)")
 
 # Additional: Remove duplicate rows based on the TASK_ID column
 rows_before_task_id_dedup = len(df_data)
-df_data = df_data.drop_duplicates(subset=['TASK_ID'])
+df_data = df_data.drop_duplicates(subset=["TASK_ID"])
 rows_after_task_id_dedup = len(df_data)
 
 # Number of rows removed due to duplicate TASK_ID
@@ -179,6 +178,20 @@ task_id_dedup_total = rows_before_task_id_dedup - rows_after_task_id_dedup
 main_logger.info(f"Removed {task_id_dedup_total} duplicate rows based on TASK_ID from data.csv")
 main_logger.info(f"Remaining rows after TASK_ID deduplication: {rows_after_task_id_dedup} ({(rows_after_task_id_dedup/rows_before_task_id_dedup)*100:.5f}% of original)")
 
+rows_full_dataset = 100  # Total number of rows in the full dataset
+
+# Remove rows where END is earlier than START (time inconsistency)
+rows_before_time_check = len(df_data)
+df_data = df_data[df_data['END'] >= df_data['START']]
+rows_after_time_check = len(df_data)
+
+# Calculate the number of rows removed due to time inconsistency
+time_inconsistency_total = rows_before_time_check - rows_after_time_check
+print(time_inconsistency_total)
+main_logger.info(f"Removed {time_inconsistency_total} rows where END time is earlier than START time")
+main_logger.info(f"This represents {(time_inconsistency_total/rows_before_time_check)*100:.5f}% of filtered dataset and {(time_inconsistency_total/rows_full_dataset)*100:.5f}% of full dataset")
+main_logger.info(f"Remaining rows after time consistency check: {rows_after_time_check} ({(rows_after_time_check/rows_before_time_check)*100:.5f}% of filtered dataset)")
+main_logger.info(f"This represents {(rows_after_time_check/rows_full_dataset)*100:.5f}% of full dataset")
 
 # Show details of removed rows
 if deletion_total > 0:
@@ -212,6 +225,20 @@ if len(rows_to_remove_clients) > 0:
     main_logger.info(f"Removed {clients_removed} rows with missing values from clients.csv")
 
 main_logger.info(f"\nSample of data.csv (after cleaning): \n\n{df_data.head().to_string()}\n")
+
+
+# Create a unique composite ID by combining PROJECT_ID and TASK_ID
+main_logger.info("Creating unique composite ID by combining PROJECT_ID and TASK_ID")
+df_data["PROJECT_TASK_ID"] = df_data["PROJECT_ID"].astype(str) + "_" + df_data["TASK_ID"].astype(str)
+
+# Log information about the new composite ID
+main_logger.info(f"Created composite PROJECT_TASK_ID column as unique identifier")
+main_logger.info(f"Number of unique PROJECT_TASK_ID values: {df_data['PROJECT_TASK_ID'].nunique()}")
+main_logger.info(f"Duplicate check: {df_data['PROJECT_TASK_ID'].duplicated().sum()} duplicate PROJECT_TASK_ID values found")
+
+# Display sample of the composite IDs
+main_logger.info(f"\nSample of PROJECT_TASK_ID column: \n\n{df_data[['PROJECT_ID', 'TASK_ID', 'PROJECT_TASK_ID']].head().to_string()}\n")
+
 
 # Logger for the translator merge
 translator_logger = logger_setup("TranslatorMerge", path_logs, "translatorsCostPairsMerge.log")
