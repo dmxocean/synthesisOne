@@ -1,69 +1,210 @@
+# Translation Tasks Optimizer
 
-## Table 'Data'
+## Project Overview
 
-- **PROJECT_ID**: Project code (extra info, I don’t think it’s really necessary)
-- **PM**: Responsible management team
-- **TASK_ID**: Task code
-- **START**: Task start date
-- **END**: Theoretical task delivery date (can be used to compare with DELIVERED date to check for delays)
-- **TASK_TYPE**: Task type. Some considerations need to be taken into account:
-  - **DTP**: Desktop Publishing tasks
-  - **Engineering**: Engineering tasks such as file conversions, coding, etc.
-  - **LanguageLead**: Linguistic management tasks. Assigned to highly experienced and skilled individuals who work regularly on the project.
-  - **Management**: General management tasks.
-  - **Miscellaneous**: Various linguistic tasks.
-  - **PostEditing**: Post-editing tasks. Similar to Translation tasks, but the TRANSLATOR’s skills are slightly different.
-  - **ProofReading**: Full review of a Translation or PostEditing task. This task always follows a Translation or PostEditing. The assigned TRANSLATOR must have more experience than the person who performed the initial step.
-  - **Spotcheck**: Partial review of a Translation or PostEditing task. This task always follows a Translation or PostEditing. The assigned TRANSLATOR must have more experience than the person who performed the initial step.
-  - **TEST**: Test required to gain access to work with a client. Must be assigned as a priority to the TRANSLATOR with the most experience and quality for the client or subject matter, regardless of cost, but considering the deadline.
-  - **Training**: Experience or quality of the TRANSLATOR is not a factor.
-  - **Translation**: Translation task. The translator’s quality can be slightly lower than required if the person doing the ProofReading (not Spotcheck) has superior skills. If a Spotcheck is performed, the quality must meet the required standard.
-- **SOURCE_LANG**: Source language
-- **TARGET_LANG**: Target language
-- **TRANSLATOR**: Translator responsible for the task
-- **ASSIGNED**: Assignment time (notice) to the TRANSLATOR (see Kanban system: [https://en.wikipedia.org/wiki/Kanban](https://en.wikipedia.org/wiki/Kanban))
-- **READY**: Time the TRANSLATOR is notified they can start
-- **WORKING**: Time the TRANSLATOR begins the task
-- **DELIVERED**: Time the TRANSLATOR delivers the task
-- **RECEIVED**: Time the PM receives the task
-- **CLOSE**: Time the PM marks the task as completed
-- **FORECAST**: Hours of dedication
-- **HOURLY_RATE**: Hourly rate for the task
-- **COST**: Total cost of the task
-- **QUALITY_EVALUATION**: Quality control evaluation
-- **MANUFACTURER**: Client
-- **MANUFACTURER_SECTOR**: Level 1 client categorization
-- **MANUFACTURER_INDUSTRY_GROUP**: Level 2 client categorization
-- **MANUFACTURER_INDUSTRY**: Level 3 client categorization
-- **MANUFACTURER_SUBINDUSTRY**: Level 4 client categorization
+The Translation Tasks Optimizer is a system designed to solve the complex challenge of assigning translation tasks to translators. 
 
-## Table 'Schedules'
+In the translation industry, project managers face the daily challenge of matching numerous translation tasks to qualified translators while balancing multiple competing factors including quality requirements, deadlines, translator expertise, language pair specialization, and cost constraints.
 
-- **NAME**: Name of the TRANSLATOR
-- **START**: Start time of their workday
-- **END**: End time of their workday
-- **MON**: Works on Monday? (1 yes, 0 no)
-- **TUES**: Works on Tuesday? (1 yes, 0 no)
-- **WED**: (1 yes, 0 no)
-- **THURS**: (1 yes, 0 no)
-- **FRI**: (1 yes, 0 no)
-- **SAT**: (1 yes, 0 no)
-- **SUN**: (1 yes, 0 no)
+This project offers a data-driven solution that automates and optimizes the task assignment process. By analyzing historical translation data, translator profiles, client requirements, and scheduling constraints, the system creates optimal matches that maximize overall quality and efficiency while minimizing costs.
 
-## Table 'Clients'
+The core of the system leverages Constraint Satisfaction, Machine Learning, and Deep Learning approaches to identify optimal translator candidates for each task. These complementary technologies analyze historical performance data, language pair proficiency, and completion patterns to detect the most suitable translators while respecting schedule constraints and client requirements. 
 
-- **CLIENT_NAME**: Client name
-- **SELLING_HOURLY_PRICE**: Hourly selling price
-- **MIN_QUALITY**: Minimum quality expected from TRANSLATORS
-- **WILDCARD**: If all conditions cannot be met, which one can be bypassed.
+This approach not only improves operational efficiency but also enhances translator satisfaction through fairer workload distribution and client satisfaction through better quality outcomes.
 
-## Table 'TranslatorsCost+Pairs'
+## Project Structure
 
-- **TRANSLATOR**: Translator’s name
-- **SOURCE_LANG**: Source language
-- **TARGET_LANG**: Target language
-- **HOURLY_RATE**: Hourly cost rate
+```
+❯ tree
+.
+├── README.md
+├── data
+│   ├── interim
+│   │   ├── README.md
+│   │   ├── logs
+│   │   │   └── ...
+│   │   ├── mergedAll.csv
+│   │   ├── sourceLanguages.json
+│   │   ├── targetLanguages.json
+│   │   └── translatorLanguages.json
+│   ├── processed
+│   │   ├── DL
+│   │   ├── ML
+│   │   └── SAT
+│   └── raw
+│       ├── clients.csv
+│       ├── data.csv
+│       ├── data.xlsx
+│       ├── schedules.csv
+│       └── translatorsCostPairs.csv
+├── deliveries
+│   └── presentation.pdf
+├── info
+│   ├── insightsPresentation.md
+│   ├── projectManagement.md
+│   ├── projectQuestions.md
+│   ├── projectSchedule.md
+│   └── projectTasks.md
+├── models
+│   ├── SAT
+│   ├── DL
+│   └── ML
+├── notebooks
+│   └── data_analysis.ipynb
+├── src
+│   ├── data
+│   │   ├── mergeCSVs.py
+│   │   ├── processCSVs.py
+│   │   ├── processCSVs.py
+│   │   ├── splitExcel.py
+│   │   └── ...
+│   ├── models
+│   │   └── ...
+│   ├── pipeline
+│   └── web
+└── utils
+    ├── logging.py
+    ├── merge.py
+    └── time.py
+```
 
-## Other Considerations
+## Datasets and Data Analysis
 
-- The translator’s experience should be assessed based on the hours they have translated for a specific client, client type, or task type.
+The project uses four primary datasets that provide comprehensive information about the translation process ecosystem. These datasets were thoroughly analyzed to extract insights and patterns that inform the optimization model.
+
+### Client Dataset (`clients.csv`)
+Contains information about client profiles, requirements, and preferences.
+| Column | Type | Description | Analysis Insights |
+| :--------------------- | :---- | :--------------------------------------------- | :---------------------------------------------------- |
+| `CLIENT_NAME` | String | Unique identifier for each client | 2,567 unique clients identified |
+| `SELLING_HOURLY_PRICE` | Float | Hourly rate charged to the client | Range: 20.00€-90.00€, Average: 26.17€ |
+| `MIN_QUALITY` | Float | Minimum quality threshold required (1-10 scale) | Average requirement: 5.57/10 |
+| `WILDCARD` | String | Requirement that can be bypassed if necessary | "Deadline" is most common (38.06%), followed by "Price" (36.46%) |
+
+**Analysis Summary:** 
+- **Client Segmentation** (K-Means clustering):
+  * **Cluster 0: Standard Quality Focus (66.2%)**
+    - Price: Moderate (avg 24.1€)
+    - Quality: High (avg 7.35/10)
+    - Wildcard: Typically "Deadline"
+  * **Cluster 1: Price Sensitive (22.5%)**
+    - Price: Moderate (avg 24.68€)
+    - Quality: Minimal (avg 0.0/10)
+    - Wildcard: Typically "Price"
+  * **Cluster 2: Premium (11.3%)**
+    - Price: High (avg 41.35€)
+    - Quality: Moderate (avg 6.2/10)
+    - Wildcard: Typically "Deadline"
+- **Key Insight**: Higher pricing ≠ higher quality demands. Premium clients often prioritize other factors over top-tier quality scores.
+
+### Translator Schedules Dataset (`schedules.csv`)
+Contains detailed information about translator availability and working patterns.
+| Column | Type | Description | Analysis Insights |
+| :-------------- | :------ | :----------------------------------------- | :-------------------------------------------------------- |
+| `NAME` | String | Translator identifier | 871 unique translators |
+| `START` | String | Time when translator begins their workday | Most common: 09:00 (10h shifts are common) |
+| `END` | String | Time when translator ends their workday | Most common: 19:00 |
+| `MON` through `SUN` | Integer | Day availability (1=available, 0=unavailable) | 57.18% work weekends (`SAT`: 46.96%, `SUN`: 47.53%) |
+| `WEEKLY_HOURS` | Float | Calculated total weekly available hours | Average: 48.97 hours, Median: 50 hours |
+| `LIKELY_TIMEZONE` | String | Estimated timezone based on start hour | Americas (94.49%), Asia/Pacific (4.02%), Europe/Africa (1.49%) |
+
+**Analysis Summary:** 
+- **Availability Patterns**:
+  * Peak availability: Friday at 13:00 (69.46% translators)
+  * Weekend coverage: 57.18% available
+  * Geographical distribution: Americas dominance (94.49%)
+- **Work Schedule Types**:
+  * Full-time (≥5 days): 64.87%
+  * Flexible schedules: 29.51%
+  * Occasional workers: 20.90%
+- **Operational Metrics**:
+  * Average utilization: 29.15%
+  * Unusual schedules: 51.78% (high hours, single-day availability, overnight shifts)
+- **Key Challenge**: Limited Europe/Asia coverage creates 24/7 service gaps
+
+### Translation Task History Dataset (`data.csv`)
+Contains historical data on translation tasks, including quality evaluations and timestamps.
+| Column | Type | Description | Analysis Insights |
+| :--------------------- | :------- | :---------------------------------------- | :-------------------------------------------------------- |
+| `PROJECT_ID` | Integer | Unique project identifier | 13,059 unique projects |
+| `TASK_ID` | Integer | Task identifier within project | 554,024 unique tasks (out of 554,029 total rows) |
+| `PM` | String | Project manager assigned | 4 unique PMs with varying workloads |
+| `TASK_TYPE` | String | Category of translation service | "Translation" is most common (50.21%) |
+| `START_TASK` | Datetime | Scheduled start date | Used for planning projections |
+| `END_TASK` | Datetime | Theoretical deadline | 90.43% of tasks completed on time |
+| `ASSIGNED` through `CLOSE` | Datetime | Workflow stage timestamps | '`READY_TO_WORKING`' is longest stage on average (17.6h) |
+| `SOURCE_LANG` | String | Original content language | 34 distinct source languages |
+| `TARGET_LANG` | String | Translation target language | 68 distinct target languages |
+| `TRANSLATOR` | String | Assigned translator | Average: ~626 tasks per translator |
+| `QUALITY_EVALUATION` | Integer | Quality score (1-10) | Average score: 7.06/10 |
+| `FORECAST` | Float | Estimated hours required | Used for planning and cost estimation |
+| `COST` | Float | Total task cost | Average: 38.26€ per task |
+| `MANUFACTURER_SECTOR` | String | Client industry sector | 'Information Technology' most common (34.31%) |
+| `LANGUAGE_PAIR` | String | Combined Source > Target language | English > Spanish (Iberian) dominates (50.73% of tasks) |
+
+**Analysis Summary:** 
+- **Task Composition**:
+  * Dominant language pair: English > Spanish (Iberian) - 50.73%
+  * Top industry: Information Technology - 34.31%
+  * Most common task type: Translation - 50.21%
+- **Performance Metrics**:
+  * On-time completion: 90.43%
+  * Average quality score: 7.06/10
+  * Average task cost: 38.26€
+- **Workflow Insights**:
+  * Bottleneck stage: Ready → Working (17.6h average)
+  * Cost-quality correlation: Very weak (-0.0149)
+- **Key Finding**: Pricing appears driven by language pair, task type, and urgency rather than by expected quality outcomes
+
+### Translator Cost Pairs Dataset (`translatorsCostPairs.csv`)
+Maps translators to language pairs with associated rates.
+| Column | Type | Description | Analysis Insights |
+| :---------- | :------ | :-------------------------------- | :-------------------------------------------------------- |
+| `TRANSLATOR` | String | Translator identifier | 871 unique translators |
+| `SOURCE_LANG` | String | Source language | 34 unique source languages |
+| `TARGET_LANG` | String | Target language | 68 unique target languages |
+| `HOURLY_RATE` | Integer | Rate for this language pair | Range: 8.00€-60.00€, Average: 20.61€ |
+| `LANGUAGE_PAIR` | String | Calculated Source > Target pair | 258 unique pairs |
+
+**Analysis Summary:** 
+- **Language Pair Coverage**:
+  * Total unique pairs: 258
+  * Single-translator pairs: 75 (29.07%)
+  * Most common: English > Spanish (Iberian)
+- **Translator Specialization**:
+  * Single pair specialists: 32.26%
+  * Highly versatile (>10 pairs): 8.50%
+  * Specialization-rate correlation: -0.12
+- **Rate Economics**:
+  * Rare language premium: 79% higher than common languages
+  * Average rates: Common (18.32€) vs. Rare (32.76€)
+- **Market Segmentation** (K-Means clustering):
+  * **Budget Common**: Low rate, high translator count
+  * **Premium Specialized**: Moderate rate, low translator count
+  * **Standard Common**: High rate, low translator count
+  * **Rare Specialty**: Moderate rate, moderate translator count
+
+## Installation Process
+
+To set up the Translation Tasks Optimizer on your system, follow these steps:
+
+### Prerequisites
+* [Anaconda](https://www.anaconda.com/products/distribution) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) installed
+* Git
+
+### Setup Steps
+```bash
+# Clone the Repository
+git clone https://github.com/dmxocean/synthesisOne
+cd synthesisOne
+
+# Create Conda Environment
+conda create -n translationEnv python=3.10 -y
+# Activate Conda Environment
+conda activate translationEnv
+
+# Install Dependencies
+pip install -r requirements.txt
+```
+
+Upon completion of these steps, the system should be ready for use within the `translationEnv` conda environment. Any issues encountered during installation can be reported through the project's issue tracker.
