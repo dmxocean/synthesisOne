@@ -14,6 +14,7 @@ sys.path.append(path_base)  # Add base path to system path
 from utils.logging import logger_setup, log_section
 from utils.merge import log_dataframe_info, log_merge_stats
 
+
 pd.set_option("display.max_columns", None) # Show all columns
 
 path_raw_data = os.path.join(path_base, "data", "raw")
@@ -23,6 +24,7 @@ os.makedirs(path_interim_data, exist_ok=True) # Ensure the interim directory exi
 
 path_logs = os.path.join(path_interim_data, "logs") # Set up log directory
 os.makedirs(path_logs, exist_ok=True)
+
 
 # Set up our main logger
 main_logger = logger_setup("InfoMerge", path_logs, "infoMerge.log")
@@ -61,13 +63,16 @@ def check_missing_threshold(df, key_columns, df_name, threshold=0.05):
     
     return missing_percentage < threshold, missing_percentage, rows_with_missing
 
+
+status_columns = ["ASSIGNED", "READY", "WORKING", "DELIVERED", "RECEIVED", "CLOSE"]
+
 # Load all data files
 path_data = os.path.join(path_raw_data, "data.csv")
 path_translator_pairs = os.path.join(path_raw_data, "translatorsCostPairs.csv")
 path_schedules = os.path.join(path_raw_data, "schedules.csv")
 path_clients = os.path.join(path_raw_data, "clients.csv")
 
-df_data = pd.read_csv(path_data)  # Historical data containing project information
+df_data = pd.read_csv(path_data, dtype={"PROJECT_ID": "object"}, parse_dates=status_columns)  # Historical data containing project information
 df_translator_pairs = pd.read_csv(path_translator_pairs)  # Current translator rates
 df_schedules = pd.read_csv(path_schedules)  # Translator schedules
 df_clients = pd.read_csv(path_clients)  # Client information
@@ -96,6 +101,7 @@ main_logger.info(f"\nMissing values in schedules.csv: \n\n{missing_schedules}\n"
 
 missing_clients = df_clients.isnull().sum() # Analyze missing values in clients.csv
 main_logger.info(f"\nMissing values in clients.csv: \n\n{missing_clients}\n")
+
 
 # Check and clean missing values in key columns for data.csv
 data_key_columns = ["TRANSLATOR", "SOURCE_LANG", "TARGET_LANG", "MANUFACTURER"]
@@ -154,6 +160,7 @@ else:
     main_logger.info("PROCEEDING WITH DATA CLEANING... (ALL KEY COLUMNS HAVE ACCEPTABLE MISSING VALUE RATES)")
     main_logger.info("")
 
+
 # Get all rows that need to be removed from data.csv
 df_data = df_data.drop_duplicates()
 rows_before_total = len(df_data)
@@ -178,8 +185,6 @@ task_id_dedup_total = rows_before_task_id_dedup - rows_after_task_id_dedup
 main_logger.info(f"Removed {task_id_dedup_total} duplicate rows based on TASK_ID from data.csv")
 main_logger.info(f"Remaining rows after TASK_ID deduplication: {rows_after_task_id_dedup} ({(rows_after_task_id_dedup/rows_before_task_id_dedup)*100:.5f}% of original)")
 
-rows_full_dataset = 100  # Total number of rows in the full dataset
-
 # Remove rows where END is earlier than START (time inconsistency)
 rows_before_time_check = len(df_data)
 df_data = df_data[df_data['END'] >= df_data['START']]
@@ -187,11 +192,9 @@ rows_after_time_check = len(df_data)
 
 # Calculate the number of rows removed due to time inconsistency
 time_inconsistency_total = rows_before_time_check - rows_after_time_check
-print(time_inconsistency_total)
 main_logger.info(f"Removed {time_inconsistency_total} rows where END time is earlier than START time")
-main_logger.info(f"This represents {(time_inconsistency_total/rows_before_time_check)*100:.5f}% of filtered dataset and {(time_inconsistency_total/rows_full_dataset)*100:.5f}% of full dataset")
+main_logger.info(f"This represents {(time_inconsistency_total/rows_before_time_check)*100:.5f}%")
 main_logger.info(f"Remaining rows after time consistency check: {rows_after_time_check} ({(rows_after_time_check/rows_before_time_check)*100:.5f}% of filtered dataset)")
-main_logger.info(f"This represents {(rows_after_time_check/rows_full_dataset)*100:.5f}% of full dataset")
 
 # Show details of removed rows
 if deletion_total > 0:
@@ -231,13 +234,17 @@ main_logger.info(f"\nSample of data.csv (after cleaning): \n\n{df_data.head().to
 main_logger.info("Creating unique composite ID by combining PROJECT_ID and TASK_ID")
 df_data["PROJECT_TASK_ID"] = df_data["PROJECT_ID"].astype(str) + "_" + df_data["TASK_ID"].astype(str)
 
+# Delete columns PROJECT_ID and TASK_ID
+df_data.drop(columns=["PROJECT_ID", "TASK_ID"], inplace=True)
+main_logger.info(f"Removed PROJECT_ID and TASK_ID columns from data.csv")
+
 # Log information about the new composite ID
 main_logger.info(f"Created composite PROJECT_TASK_ID column as unique identifier")
 main_logger.info(f"Number of unique PROJECT_TASK_ID values: {df_data['PROJECT_TASK_ID'].nunique()}")
 main_logger.info(f"Duplicate check: {df_data['PROJECT_TASK_ID'].duplicated().sum()} duplicate PROJECT_TASK_ID values found")
 
 # Display sample of the composite IDs
-main_logger.info(f"\nSample of PROJECT_TASK_ID column: \n\n{df_data[['PROJECT_ID', 'TASK_ID', 'PROJECT_TASK_ID']].head().to_string()}\n")
+main_logger.info(f"\nSample of PROJECT_TASK_ID column: \n\n{df_data[['PROJECT_TASK_ID']].head().to_string()}\n")
 
 
 # Logger for the translator merge
