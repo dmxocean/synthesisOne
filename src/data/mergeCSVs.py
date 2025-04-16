@@ -158,13 +158,27 @@ else:
 rows_deletion = rows_deletion.drop_duplicates()
 rows_before_total = len(df_data)
 
+# Drop rows with missing values
 df_data.dropna(inplace=True)
 rows_after_total = len(df_data)
 
+# Calculate the number of rows removed due to missing values
 deletion_total = rows_before_total - rows_after_total
 
 main_logger.info(f"Removed {deletion_total} rows with missing values from data.csv")
 main_logger.info(f"Remaining rows after cleaning: {rows_after_total} ({(rows_after_total/rows_before_total)*100:.5f}% of original)")
+
+# Additional: Remove duplicate rows based on the TASK_ID column
+rows_before_task_id_dedup = len(df_data)
+df_data = df_data.drop_duplicates(subset=['TASK_ID'])
+rows_after_task_id_dedup = len(df_data)
+
+# Number of rows removed due to duplicate TASK_ID
+task_id_dedup_total = rows_before_task_id_dedup - rows_after_task_id_dedup
+
+main_logger.info(f"Removed {task_id_dedup_total} duplicate rows based on TASK_ID from data.csv")
+main_logger.info(f"Remaining rows after TASK_ID deduplication: {rows_after_task_id_dedup} ({(rows_after_task_id_dedup/rows_before_task_id_dedup)*100:.5f}% of original)")
+
 
 # Show details of removed rows
 if deletion_total > 0:
