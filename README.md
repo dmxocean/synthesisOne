@@ -123,29 +123,40 @@ Contains detailed information about translator availability and working patterns
 - **Key Challenge**: Limited Europe/Asia coverage creates 24/7 service gaps
 
 ### Translation Task History Dataset (`data.csv`)
-Contains historical data on translation tasks, including quality evaluations and timestamps.
-| Column | Type | Description | Analysis Insights |
-| :--------------------- | :------- | :---------------------------------------- | :-------------------------------------------------------- |
-| `PROJECT_ID` | Integer | Unique project identifier | 13,059 unique projects |
-| `TASK_ID` | Integer | Task identifier within project | 554,024 unique tasks (out of 554,029 total rows) |
-| `PM` | String | Project manager assigned | 4 unique PMs with varying workloads |
-| `TASK_TYPE` | String | Category of translation service | "Translation" is most common (50.21%) |
-| `START_TASK` | Datetime | Scheduled start date | Used for planning projections |
-| `END_TASK` | Datetime | Theoretical deadline | 90.43% of tasks completed on time |
-| `ASSIGNED` through `CLOSE` | Datetime | Workflow stage timestamps | '`READY_TO_WORKING`' is longest stage on average (17.6h) |
-| `SOURCE_LANG` | String | Original content language | 34 distinct source languages |
-| `TARGET_LANG` | String | Translation target language | 68 distinct target languages |
-| `TRANSLATOR` | String | Assigned translator | Average: ~626 tasks per translator |
-| `QUALITY_EVALUATION` | Integer | Quality score (1-10) | Average score: 7.06/10 |
-| `FORECAST` | Float | Estimated hours required | Used for planning and cost estimation |
-| `COST` | Float | Total task cost | Average: 38.26€ per task |
-| `MANUFACTURER_SECTOR` | String | Client industry sector | 'Information Technology' most common (34.31%) |
-| `LANGUAGE_PAIR` | String | Combined Source > Target language | English > Spanish (Iberian) dominates (50.73% of tasks) |
+Contains historical data on translation tasks, including quality evaluations, costs, client details, and timestamps.
 
-**Analysis Summary:** 
+| Column| Type | Description | Analysis Insights |
+| :-------------------------- | :------- | :-------------------------------------------------------------------------- | :--------------------------------------------------------- |
+| `PROJECT_ID`| Integer | Unique project identifier | 13,059 unique projects |
+| `TASK_ID`| Integer | Task identifier within project | 554,024 unique tasks (out of 554,029 total rows) |
+| `PM` | String| Project manager assigned | 4 unique PMs with varying workloads |
+| `TASK_TYPE` | String| Category of translation service (See initial docs for details) | "Translation" is most common (50.21%) |
+| `START`| Datetime | Task start date/time| Used for planning projections |
+| `END` | Datetime | Theoretical task delivery date (can be used to compare with the DELIVERED date to check for delays) | 90.43% of tasks completed on time |
+| `ASSIGNED` | Datetime | Timestamp when task is pre-assigned to translator | Part of workflow timing analysis |
+| `READY` | Datetime | Timestamp when translator notified they can start | '`READY`-to-`WORKING`' stage avg: 17.6h (potential bottleneck) |
+| `WORKING`| Datetime | Timestamp when translator starts the task| Part of workflow timing analysis |
+| `DELIVERED` | Datetime | Timestamp when translator delivers the task | Compared with `END` for delays |
+| `RECEIVED` | Datetime | Timestamp when PM receives the delivered task | Part of workflow timing analysis |
+| `CLOSE` | Datetime | Timestamp when PM marks task as completed | End of task lifecycle |
+| `SOURCE_LANG` | String| Original content language| 34 distinct source languages |
+| `TARGET_LANG` | String| Translation target language | 68 distinct target languages |
+| `LANGUAGE_PAIR` | String| Combined Source > Target language (Derived) | English > Spanish (Iberian) dominates (50.73% of tasks) |
+| `TRANSLATOR`| String| Assigned translator | Average: ~626 tasks per translator |
+| `QUALITY_EVALUATION` | Integer | Quality score (e.g., 1-10) assigned after review | Average score: 7.06/10 |
+| `FORECAST` | Float | Estimated hours required for the task | Used for planning and cost estimation |
+| `HOURLY_RATE` | Float | Historical hourly rate paid to the translator for this specific task | Varies by translator, language pair, task type |
+| `COST` | Float | Total cost paid to the translator for the task (`HOURLY_RATE` * `FORECAST`) | Average: 38.26€ per task|
+| `MANUFACTURER` | String| Client organization name | Corresponds to `CLIENT_NAME` in `clients.csv` |
+| `MANUFACTURER_SECTOR` | String| Level 1 client industry sector | 'Information Technology' most common (34.31%) |
+| `MANUFACTURER_INDUSTRY_GROUP` | String| Level 2 client industry categorization | Provides finer client segmentation |
+| `MANUFACTURER_INDUSTRY` | String| Level 3 client industry categorization | Provides finer client segmentation |
+| `MANUFACTURER_SUBINDUSTRY` | String| Level 4 client industry categorization | Provides most granular client segmentation |
+
+**Analysis Summary:**
 - **Task Composition**:
   * Dominant language pair: English > Spanish (Iberian) - 50.73%
-  * Top industry: Information Technology - 34.31%
+  * Top industry sector: Information Technology - 34.31%
   * Most common task type: Translation - 50.21%
 - **Performance Metrics**:
   * On-time completion: 90.43%
@@ -154,7 +165,7 @@ Contains historical data on translation tasks, including quality evaluations and
 - **Workflow Insights**:
   * Bottleneck stage: Ready → Working (17.6h average)
   * Cost-quality correlation: Very weak (-0.0149)
-- **Key Finding**: Pricing appears driven by language pair, task type, and urgency rather than by expected quality outcomes
+- **Key Finding**: Pricing appears driven by language pair, task type, and urgency rather than by expected quality outcomes.
 
 ### Translator Cost Pairs Dataset (`translatorsCostPairs.csv`)
 Maps translators to language pairs with associated rates.
@@ -163,7 +174,7 @@ Maps translators to language pairs with associated rates.
 | `TRANSLATOR` | String | Translator identifier | 871 unique translators |
 | `SOURCE_LANG` | String | Source language | 34 unique source languages |
 | `TARGET_LANG` | String | Target language | 68 unique target languages |
-| `HOURLY_RATE` | Integer | Rate for this language pair | Range: 8.00€-60.00€, Average: 20.61€ |
+| `HOURLY_RATE` | Integer | Historical rate paid to the translator for the specific task | Range: 8.00€-60.00€, Average: 20.61€ |
 | `LANGUAGE_PAIR` | String | Calculated Source > Target pair | 258 unique pairs |
 
 **Analysis Summary:** 
