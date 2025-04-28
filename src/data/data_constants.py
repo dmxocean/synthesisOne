@@ -66,12 +66,3 @@ class Files:
     TRANSLATOR_DATA_JSON = "translator_specialties.json"
     LOOKUP_INDEXES_JSON = "specialties_lookup_indexes.json"
 
-# Required columns list
-REQUIRED_COLUMNS = [
-    Columns.TRANSLATOR,
-    Columns.SOURCE_LANG,
-    Columns.TARGET_LANG,
-    Columns.MANUFACTURER,
-    Columns.MANUFACTURER_SECTOR,
-    Columns.QUALITY_EVALUATION
-]
