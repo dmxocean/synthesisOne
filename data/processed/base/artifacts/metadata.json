@@ -1,0 +1,13 @@
+{
+  "preprocessing_date": "2025-05-06 17:16:12",
+  "artifacts": [
+    "translator_mapping",
+    "translator_metrics",
+    "language_pair_metrics",
+    "translator_capabilities",
+    "translator_hourly_rates",
+    "clients_data",
+    "translator_schedule_metrics",
+    "translator_efficiency_metrics"
+  ]
+}

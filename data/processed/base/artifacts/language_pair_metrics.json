@@ -1,0 +1,1883 @@
+{
+  "__global_average__": {
+    "task_count": 2054.5503875968993,
+    "avg_cost": 39.54423610665682,
+    "avg_quality": 7.070263774491863,
+    "translator_count": 14.531007751937985,
+    "avg_forecast": 2.4455465651965573
+  },
+  "English": {
+    "Spanish (Iberian)": {
+      "task_count": 270241,
+      "avg_cost": 42.15790657228179,
+      "avg_quality": 7.066333383905477,
+      "translator_count": 499,
+      "avg_forecast": 2.855449913225603
+    },
+    "Galician": {
+      "task_count": 54257,
+      "avg_cost": 14.305089481541552,
+      "avg_quality": 7.071658956448016,
+      "translator_count": 90,
+      "avg_forecast": 0.9373019149602817
+    },
+    "Spanish (LA)": {
+      "task_count": 57618,
+      "avg_cost": 32.615106911034744,
+      "avg_quality": 7.09746954076851,
+      "translator_count": 310,
+      "avg_forecast": 2.537212329480371
+    },
+    "Catalan": {
+      "task_count": 45467,
+      "avg_cost": 25.885532144192492,
+      "avg_quality": 6.9889590252270875,
+      "translator_count": 151,
+      "avg_forecast": 1.3936474805903183
+    },
+    "Spanish (Global)": {
+      "task_count": 20582,
+      "avg_cost": 45.14368525896415,
+      "avg_quality": 7.043047322903508,
+      "translator_count": 309,
+      "avg_forecast": 3.0547007093576917
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 11296,
+      "avg_cost": 31.707584985835695,
+      "avg_quality": 7.219723796033994,
+      "translator_count": 77,
+      "avg_forecast": 1.7940571883852694
+    },
+    "Spanish (Mexico)": {
+      "task_count": 606,
+      "avg_cost": 57.30745874587458,
+      "avg_quality": 7.224422442244224,
+      "translator_count": 49,
+      "avg_forecast": 3.4071782178217815
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 14911,
+      "avg_cost": 38.36893367312722,
+      "avg_quality": 7.411910669975186,
+      "translator_count": 84,
+      "avg_forecast": 2.338272416336933
+    },
+    "French": {
+      "task_count": 1213,
+      "avg_cost": 73.97910140148392,
+      "avg_quality": 7.625721352019785,
+      "translator_count": 42,
+      "avg_forecast": 2.9647155812036274
+    },
+    "Basque": {
+      "task_count": 17535,
+      "avg_cost": 52.70646022241232,
+      "avg_quality": 6.943028229255774,
+      "translator_count": 76,
+      "avg_forecast": 1.6375854006273167
+    },
+    "Italian": {
+      "task_count": 701,
+      "avg_cost": 88.56462196861627,
+      "avg_quality": 7.001426533523538,
+      "translator_count": 27,
+      "avg_forecast": 2.951355206847361
+    },
+    "Guaran\u00ed": {
+      "task_count": 2524,
+      "avg_cost": 23.96582408874802,
+      "avg_quality": 6.852218700475436,
+      "translator_count": 11,
+      "avg_forecast": 1.397282091917591
+    },
+    "Quechua": {
+      "task_count": 4148,
+      "avg_cost": 64.2737825458052,
+      "avg_quality": 6.955882352941177,
+      "translator_count": 24,
+      "avg_forecast": 1.5484305689488909
+    },
+    "Spanish (Chile)": {
+      "task_count": 2,
+      "avg_cost": 5.050000000000001,
+      "avg_quality": 6.0,
+      "translator_count": 2,
+      "avg_forecast": 0.42
+    },
+    "Valencian": {
+      "task_count": 2601,
+      "avg_cost": 24.246297577854673,
+      "avg_quality": 6.9342560553633215,
+      "translator_count": 24,
+      "avg_forecast": 1.0127835447904652
+    },
+    "Spanish (US)": {
+      "task_count": 3596,
+      "avg_cost": 9.665909343715239,
+      "avg_quality": 6.938820912124583,
+      "translator_count": 55,
+      "avg_forecast": 0.6353392658509455
+    },
+    "English": {
+      "task_count": 178,
+      "avg_cost": 32.449101123595504,
+      "avg_quality": 7.134831460674158,
+      "translator_count": 44,
+      "avg_forecast": 1.57876404494382
+    },
+    "Urdu": {
+      "task_count": 3,
+      "avg_cost": 40.9,
+      "avg_quality": 6.666666666666667,
+      "translator_count": 2,
+      "avg_forecast": 1.3833333333333335
+    },
+    "German": {
+      "task_count": 350,
+      "avg_cost": 208.24391428571428,
+      "avg_quality": 7.34,
+      "translator_count": 28,
+      "avg_forecast": 6.021942857142856
+    },
+    "Dutch": {
+      "task_count": 92,
+      "avg_cost": 180.9857608695652,
+      "avg_quality": 7.076086956521739,
+      "translator_count": 9,
+      "avg_forecast": 6.033478260869565
+    },
+    "Greek": {
+      "task_count": 31,
+      "avg_cost": 131.44322580645164,
+      "avg_quality": 7.580645161290323,
+      "translator_count": 9,
+      "avg_forecast": 3.131612903225806
+    },
+    "Hungarian": {
+      "task_count": 24,
+      "avg_cost": 321.7495833333333,
+      "avg_quality": 7.125,
+      "translator_count": 8,
+      "avg_forecast": 7.805833333333332
+    },
+    "Polish": {
+      "task_count": 114,
+      "avg_cost": 180.62307017543858,
+      "avg_quality": 6.964912280701754,
+      "translator_count": 10,
+      "avg_forecast": 7.152368421052633
+    },
+    "Swedish": {
+      "task_count": 51,
+      "avg_cost": 315.8094117647059,
+      "avg_quality": 7.0,
+      "translator_count": 8,
+      "avg_forecast": 7.737647058823529
+    },
+    "Czech": {
+      "task_count": 35,
+      "avg_cost": 193.63314285714284,
+      "avg_quality": 7.0,
+      "translator_count": 5,
+      "avg_forecast": 5.4237142857142855
+    },
+    "Finnish": {
+      "task_count": 29,
+      "avg_cost": 164.47931034482758,
+      "avg_quality": 7.793103448275862,
+      "translator_count": 6,
+      "avg_forecast": 4.016206896551724
+    },
+    "Russian": {
+      "task_count": 127,
+      "avg_cost": 268.63393700787395,
+      "avg_quality": 7.05511811023622,
+      "translator_count": 12,
+      "avg_forecast": 8.764409448818897
+    },
+    "Korean": {
+      "task_count": 31,
+      "avg_cost": 488.2425806451613,
+      "avg_quality": 6.548387096774194,
+      "translator_count": 6,
+      "avg_forecast": 9.443870967741935
+    },
+    "Japanese": {
+      "task_count": 58,
+      "avg_cost": 281.94517241379305,
+      "avg_quality": 6.586206896551724,
+      "translator_count": 11,
+      "avg_forecast": 9.310689655172414
+    },
+    "Arabic": {
+      "task_count": 39,
+      "avg_cost": 292.94897435897434,
+      "avg_quality": 6.717948717948718,
+      "translator_count": 7,
+      "avg_forecast": 11.064871794871795
+    },
+    "Norwegian": {
+      "task_count": 24,
+      "avg_cost": 135.65583333333333,
+      "avg_quality": 6.5,
+      "translator_count": 5,
+      "avg_forecast": 3.370416666666667
+    },
+    "Spanish (Argentina)": {
+      "task_count": 100,
+      "avg_cost": 17.7973,
+      "avg_quality": 7.06,
+      "translator_count": 10,
+      "avg_forecast": 1.0849
+    },
+    "Danish": {
+      "task_count": 23,
+      "avg_cost": 216.71782608695653,
+      "avg_quality": 7.217391304347826,
+      "translator_count": 4,
+      "avg_forecast": 5.050434782608695
+    },
+    "Chinese (Simplified)": {
+      "task_count": 37,
+      "avg_cost": 273.5486486486486,
+      "avg_quality": 6.8108108108108105,
+      "translator_count": 8,
+      "avg_forecast": 9.70972972972973
+    },
+    "Ukrainian": {
+      "task_count": 7,
+      "avg_cost": 67.77142857142857,
+      "avg_quality": 7.0,
+      "translator_count": 2,
+      "avg_forecast": 1.8071428571428572
+    },
+    "Slovak": {
+      "task_count": 26,
+      "avg_cost": 282.47153846153844,
+      "avg_quality": 6.884615384615385,
+      "translator_count": 8,
+      "avg_forecast": 8.858076923076924
+    },
+    "Azeri": {
+      "task_count": 2,
+      "avg_cost": 15.81,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 0.51
+    },
+    "Quiche": {
+      "task_count": 1686,
+      "avg_cost": 23.669952550415186,
+      "avg_quality": 6.877817319098458,
+      "translator_count": 20,
+      "avg_forecast": 1.74208778173191
+    },
+    "Romanian": {
+      "task_count": 18,
+      "avg_cost": 218.04777777777775,
+      "avg_quality": 7.5,
+      "translator_count": 8,
+      "avg_forecast": 6.151666666666667
+    },
+    "Aymara": {
+      "task_count": 3,
+      "avg_cost": 43.91,
+      "avg_quality": 8.0,
+      "translator_count": 2,
+      "avg_forecast": 3.106666666666667
+    },
+    "Bulgarian": {
+      "task_count": 7,
+      "avg_cost": 170.93,
+      "avg_quality": 7.0,
+      "translator_count": 4,
+      "avg_forecast": 4.9399999999999995
+    },
+    "English (US)": {
+      "task_count": 2,
+      "avg_cost": 100.5,
+      "avg_quality": 8.5,
+      "translator_count": 2,
+      "avg_forecast": 4.3
+    },
+    "Uzbek": {
+      "task_count": 3,
+      "avg_cost": 65.39999999999999,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 1.8166666666666667
+    },
+    "Persian": {
+      "task_count": 1,
+      "avg_cost": 6.630000000000001,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 0.17
+    },
+    "Hebrew": {
+      "task_count": 6,
+      "avg_cost": 181.865,
+      "avg_quality": 7.0,
+      "translator_count": 5,
+      "avg_forecast": 3.143333333333333
+    },
+    "French (Canadian)": {
+      "task_count": 34,
+      "avg_cost": 81.30794117647059,
+      "avg_quality": 7.411764705882353,
+      "translator_count": 7,
+      "avg_forecast": 2.8364705882352936
+    },
+    "Chinese(Traditional)": {
+      "task_count": 15,
+      "avg_cost": 567.2133333333334,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 3,
+      "avg_forecast": 10.440666666666665
+    },
+    "English (UK)": {
+      "task_count": 3,
+      "avg_cost": 12.75,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 1,
+      "avg_forecast": 0.75
+    },
+    "Mixteco": {
+      "task_count": 1,
+      "avg_cost": 20.68,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 0.47
+    },
+    "Fulah": {
+      "task_count": 2,
+      "avg_cost": 196.89499999999998,
+      "avg_quality": 7.5,
+      "translator_count": 1,
+      "avg_forecast": 3.7150000000000003
+    },
+    "Asturian": {
+      "task_count": 1,
+      "avg_cost": 240.0,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 6.0
+    },
+    "Slovenian": {
+      "task_count": 4,
+      "avg_cost": 60.237500000000004,
+      "avg_quality": 7.5,
+      "translator_count": 2,
+      "avg_forecast": 1.5925
+    },
+    "Croat": {
+      "task_count": 4,
+      "avg_cost": 156.3625,
+      "avg_quality": 7.0,
+      "translator_count": 2,
+      "avg_forecast": 4.577500000000001
+    },
+    "Irish": {
+      "task_count": 1,
+      "avg_cost": 58.8,
+      "avg_quality": 5.0,
+      "translator_count": 1,
+      "avg_forecast": 1.4
+    },
+    "Maltese": {
+      "task_count": 1,
+      "avg_cost": 56.0,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 1.4
+    },
+    "Lithuanian": {
+      "task_count": 3,
+      "avg_cost": 111.89999999999999,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 3,
+      "avg_forecast": 3.8699999999999997
+    },
+    "Latvian": {
+      "task_count": 6,
+      "avg_cost": 84.66833333333334,
+      "avg_quality": 6.166666666666667,
+      "translator_count": 5,
+      "avg_forecast": 2.4633333333333334
+    },
+    "Indonesian": {
+      "task_count": 2,
+      "avg_cost": 22.54,
+      "avg_quality": 9.5,
+      "translator_count": 1,
+      "avg_forecast": 0.98
+    },
+    "Turkish": {
+      "task_count": 19,
+      "avg_cost": 62.64368421052632,
+      "avg_quality": 6.947368421052632,
+      "translator_count": 5,
+      "avg_forecast": 1.6463157894736842
+    },
+    "Portuguese (SOURCE)": {
+      "task_count": 5,
+      "avg_cost": 116.734,
+      "avg_quality": 7.4,
+      "translator_count": 3,
+      "avg_forecast": 8.554
+    },
+    "Kazakh": {
+      "task_count": 1,
+      "avg_cost": 24.57,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 0.91
+    },
+    "Bahasa": {
+      "task_count": 1,
+      "avg_cost": 1.84,
+      "avg_quality": 9.0,
+      "translator_count": 1,
+      "avg_forecast": 0.08
+    },
+    "Qeqchi": {
+      "task_count": 1,
+      "avg_cost": 0.0,
+      "avg_quality": 9.0,
+      "translator_count": 1,
+      "avg_forecast": 0.0
+    },
+    "Estonian": {
+      "task_count": 3,
+      "avg_cost": 68.02,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 1,
+      "avg_forecast": 1.79
+    },
+    "Scottish": {
+      "task_count": 1,
+      "avg_cost": 29.68,
+      "avg_quality": 4.0,
+      "translator_count": 1,
+      "avg_forecast": 0.53
+    },
+    "Flemish": {
+      "task_count": 1,
+      "avg_cost": 45.2,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 1.13
+    }
+  },
+  "German": {
+    "Spanish (Iberian)": {
+      "task_count": 7675,
+      "avg_cost": 62.70305276872964,
+      "avg_quality": 7.007947882736157,
+      "translator_count": 105,
+      "avg_forecast": 2.7524416938110745
+    },
+    "Spanish (LA)": {
+      "task_count": 722,
+      "avg_cost": 104.47505540166203,
+      "avg_quality": 6.92797783933518,
+      "translator_count": 38,
+      "avg_forecast": 5.1352631578947365
+    },
+    "Catalan": {
+      "task_count": 141,
+      "avg_cost": 101.4668085106383,
+      "avg_quality": 7.01418439716312,
+      "translator_count": 12,
+      "avg_forecast": 6.321063829787234
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 488,
+      "avg_cost": 54.86223360655738,
+      "avg_quality": 7.362704918032787,
+      "translator_count": 13,
+      "avg_forecast": 2.06702868852459
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 197,
+      "avg_cost": 40.16030456852792,
+      "avg_quality": 7.208121827411167,
+      "translator_count": 12,
+      "avg_forecast": 1.98751269035533
+    },
+    "English": {
+      "task_count": 45,
+      "avg_cost": 240.38911111111108,
+      "avg_quality": 6.4222222222222225,
+      "translator_count": 11,
+      "avg_forecast": 7.019555555555557
+    },
+    "Norwegian": {
+      "task_count": 2,
+      "avg_cost": 163.76000000000002,
+      "avg_quality": 7.5,
+      "translator_count": 1,
+      "avg_forecast": 3.56
+    },
+    "Spanish (Mexico)": {
+      "task_count": 45,
+      "avg_cost": 206.08777777777775,
+      "avg_quality": 6.7555555555555555,
+      "translator_count": 6,
+      "avg_forecast": 9.975777777777777
+    },
+    "Basque": {
+      "task_count": 3,
+      "avg_cost": 104.04,
+      "avg_quality": 6.666666666666667,
+      "translator_count": 2,
+      "avg_forecast": 3.6300000000000003
+    },
+    "English (UK)": {
+      "task_count": 1,
+      "avg_cost": 87.57,
+      "avg_quality": 5.0,
+      "translator_count": 1,
+      "avg_forecast": 4.17
+    },
+    "English (US)": {
+      "task_count": 14,
+      "avg_cost": 74.675,
+      "avg_quality": 7.0,
+      "translator_count": 3,
+      "avg_forecast": 2.975
+    },
+    "French": {
+      "task_count": 4,
+      "avg_cost": 33.675,
+      "avg_quality": 5.75,
+      "translator_count": 2,
+      "avg_forecast": 0.865
+    },
+    "Spanish (Global)": {
+      "task_count": 281,
+      "avg_cost": 51.39868327402135,
+      "avg_quality": 6.92170818505338,
+      "translator_count": 29,
+      "avg_forecast": 3.023096085409253
+    },
+    "Italian": {
+      "task_count": 6,
+      "avg_cost": 23.76,
+      "avg_quality": 6.666666666666667,
+      "translator_count": 3,
+      "avg_forecast": 1.0433333333333332
+    },
+    "Polish": {
+      "task_count": 2,
+      "avg_cost": 43.475,
+      "avg_quality": 7.0,
+      "translator_count": 2,
+      "avg_forecast": 0.925
+    }
+  },
+  "Italian": {
+    "Spanish (LA)": {
+      "task_count": 21,
+      "avg_cost": 246.11714285714282,
+      "avg_quality": 6.904761904761905,
+      "translator_count": 9,
+      "avg_forecast": 12.141904761904762
+    },
+    "Spanish (Iberian)": {
+      "task_count": 134,
+      "avg_cost": 202.71708955223878,
+      "avg_quality": 6.932835820895522,
+      "translator_count": 29,
+      "avg_forecast": 11.233805970149254
+    },
+    "Catalan": {
+      "task_count": 20,
+      "avg_cost": 61.585,
+      "avg_quality": 7.2,
+      "translator_count": 4,
+      "avg_forecast": 3.508
+    },
+    "English": {
+      "task_count": 7,
+      "avg_cost": 377.4328571428572,
+      "avg_quality": 8.142857142857142,
+      "translator_count": 3,
+      "avg_forecast": 13.095714285714289
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 1,
+      "avg_cost": 18.48,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 0.88
+    },
+    "Spanish (Argentina)": {
+      "task_count": 1,
+      "avg_cost": 17.25,
+      "avg_quality": 9.0,
+      "translator_count": 1,
+      "avg_forecast": 1.15
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 1,
+      "avg_cost": 158.85,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 10.59
+    },
+    "French": {
+      "task_count": 1,
+      "avg_cost": 48.6,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 1.8
+    },
+    "Spanish (Global)": {
+      "task_count": 3,
+      "avg_cost": 20.69333333333333,
+      "avg_quality": 6.0,
+      "translator_count": 3,
+      "avg_forecast": 0.8833333333333333
+    }
+  },
+  "Spanish (Iberian)": {
+    "French": {
+      "task_count": 865,
+      "avg_cost": 155.01884393063582,
+      "avg_quality": 7.213872832369942,
+      "translator_count": 49,
+      "avg_forecast": 5.05642774566474
+    },
+    "Valencian": {
+      "task_count": 83,
+      "avg_cost": 31.847831325301204,
+      "avg_quality": 6.734939759036145,
+      "translator_count": 7,
+      "avg_forecast": 1.6693975903614457
+    },
+    "Catalan": {
+      "task_count": 591,
+      "avg_cost": 54.7634179357022,
+      "avg_quality": 7.04906937394247,
+      "translator_count": 73,
+      "avg_forecast": 3.9793062605752962
+    },
+    "English": {
+      "task_count": 2769,
+      "avg_cost": 149.78862405200434,
+      "avg_quality": 7.317804261466233,
+      "translator_count": 115,
+      "avg_forecast": 5.0636944745395445
+    },
+    "Spanish (LA)": {
+      "task_count": 108,
+      "avg_cost": 99.18055555555556,
+      "avg_quality": 6.87962962962963,
+      "translator_count": 28,
+      "avg_forecast": 5.663518518518519
+    },
+    "German": {
+      "task_count": 254,
+      "avg_cost": 151.8217716535433,
+      "avg_quality": 7.145669291338582,
+      "translator_count": 21,
+      "avg_forecast": 4.142244094488189
+    },
+    "Italian": {
+      "task_count": 118,
+      "avg_cost": 119.79661016949153,
+      "avg_quality": 7.0,
+      "translator_count": 15,
+      "avg_forecast": 4.710338983050849
+    },
+    "English (US)": {
+      "task_count": 105,
+      "avg_cost": 178.076,
+      "avg_quality": 6.819047619047619,
+      "translator_count": 16,
+      "avg_forecast": 5.354571428571429
+    },
+    "Chinese (Simplified)": {
+      "task_count": 8,
+      "avg_cost": 22.323750000000004,
+      "avg_quality": 7.0,
+      "translator_count": 3,
+      "avg_forecast": 0.6575000000000001
+    },
+    "English (UK)": {
+      "task_count": 113,
+      "avg_cost": 181.6438053097345,
+      "avg_quality": 7.584070796460177,
+      "translator_count": 14,
+      "avg_forecast": 6.478230088495576
+    },
+    "Basque": {
+      "task_count": 114,
+      "avg_cost": 99.55122807017544,
+      "avg_quality": 6.719298245614035,
+      "translator_count": 23,
+      "avg_forecast": 5.385350877192982
+    },
+    "Spanish (Iberian)": {
+      "task_count": 245,
+      "avg_cost": 64.91273469387755,
+      "avg_quality": 6.893877551020408,
+      "translator_count": 67,
+      "avg_forecast": 6.449591836734694
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 102,
+      "avg_cost": 36.12931372549019,
+      "avg_quality": 7.852941176470588,
+      "translator_count": 10,
+      "avg_forecast": 2.6838235294117645
+    },
+    "Norwegian": {
+      "task_count": 6,
+      "avg_cost": 503.22333333333336,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 5,
+      "avg_forecast": 11.329999999999998
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 285,
+      "avg_cost": 52.9601052631579,
+      "avg_quality": 7.252631578947368,
+      "translator_count": 22,
+      "avg_forecast": 3.088982456140351
+    },
+    "Galician": {
+      "task_count": 43,
+      "avg_cost": 51.11255813953489,
+      "avg_quality": 7.348837209302325,
+      "translator_count": 14,
+      "avg_forecast": 3.7418604651162797
+    },
+    "Russian": {
+      "task_count": 113,
+      "avg_cost": 627.2096460176991,
+      "avg_quality": 7.008849557522124,
+      "translator_count": 10,
+      "avg_forecast": 16.434247787610616
+    },
+    "French (Switzerland)": {
+      "task_count": 1,
+      "avg_cost": 16.64,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 0.32
+    },
+    "Dutch": {
+      "task_count": 24,
+      "avg_cost": 208.8125,
+      "avg_quality": 6.708333333333333,
+      "translator_count": 3,
+      "avg_forecast": 4.797916666666667
+    },
+    "Greek": {
+      "task_count": 4,
+      "avg_cost": 166.395,
+      "avg_quality": 7.0,
+      "translator_count": 3,
+      "avg_forecast": 5.85
+    },
+    "Swedish": {
+      "task_count": 1,
+      "avg_cost": 641.5999999999999,
+      "avg_quality": 5.0,
+      "translator_count": 1,
+      "avg_forecast": 16.04
+    },
+    "Ukrainian": {
+      "task_count": 1,
+      "avg_cost": 64.26,
+      "avg_quality": 10.0,
+      "translator_count": 1,
+      "avg_forecast": 1.26
+    },
+    "Arabic": {
+      "task_count": 6,
+      "avg_cost": 150.92333333333332,
+      "avg_quality": 6.666666666666667,
+      "translator_count": 3,
+      "avg_forecast": 5.778333333333333
+    },
+    "Polish": {
+      "task_count": 5,
+      "avg_cost": 426.26800000000003,
+      "avg_quality": 6.4,
+      "translator_count": 2,
+      "avg_forecast": 14.803999999999998
+    },
+    "Czech": {
+      "task_count": 1,
+      "avg_cost": 609.52,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 16.04
+    },
+    "Japanese": {
+      "task_count": 5,
+      "avg_cost": 68.29400000000001,
+      "avg_quality": 6.6,
+      "translator_count": 3,
+      "avg_forecast": 1.262
+    },
+    "Romanian": {
+      "task_count": 2,
+      "avg_cost": 19.125,
+      "avg_quality": 6.5,
+      "translator_count": 2,
+      "avg_forecast": 0.925
+    },
+    "Hungarian": {
+      "task_count": 1,
+      "avg_cost": 13.8,
+      "avg_quality": 5.0,
+      "translator_count": 1,
+      "avg_forecast": 0.92
+    },
+    "Slovak": {
+      "task_count": 2,
+      "avg_cost": 7.3549999999999995,
+      "avg_quality": 6.5,
+      "translator_count": 2,
+      "avg_forecast": 0.505
+    },
+    "Spanish (Global)": {
+      "task_count": 7,
+      "avg_cost": 44.965714285714284,
+      "avg_quality": 6.714285714285714,
+      "translator_count": 5,
+      "avg_forecast": 2.8814285714285717
+    },
+    "Turkish": {
+      "task_count": 2,
+      "avg_cost": 176.54,
+      "avg_quality": 6.5,
+      "translator_count": 2,
+      "avg_forecast": 2.995
+    },
+    "Majorcan": {
+      "task_count": 3,
+      "avg_cost": 39.05,
+      "avg_quality": 7.666666666666667,
+      "translator_count": 1,
+      "avg_forecast": 1.1833333333333333
+    },
+    "Quechua": {
+      "task_count": 6,
+      "avg_cost": 80.6,
+      "avg_quality": 6.833333333333333,
+      "translator_count": 3,
+      "avg_forecast": 2.9133333333333336
+    },
+    "Quiche": {
+      "task_count": 3,
+      "avg_cost": 92.26666666666667,
+      "avg_quality": 7.0,
+      "translator_count": 2,
+      "avg_forecast": 5.766666666666667
+    }
+  },
+  "English (US)": {
+    "Spanish (Mexico)": {
+      "task_count": 3,
+      "avg_cost": 0.049999999999999996,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 3,
+      "avg_forecast": 0.0033333333333333335
+    },
+    "Spanish (Global)": {
+      "task_count": 3,
+      "avg_cost": 82.29333333333334,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 3,
+      "avg_forecast": 5.046666666666667
+    },
+    "English (US)": {
+      "task_count": 1,
+      "avg_cost": 0.0,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 0.0
+    },
+    "Spanish (LA)": {
+      "task_count": 4,
+      "avg_cost": 24.715,
+      "avg_quality": 7.25,
+      "translator_count": 4,
+      "avg_forecast": 2.06
+    },
+    "Spanish (Iberian)": {
+      "task_count": 23,
+      "avg_cost": 11.864347826086956,
+      "avg_quality": 7.217391304347826,
+      "translator_count": 11,
+      "avg_forecast": 1.0286956521739132
+    },
+    "Galician": {
+      "task_count": 7,
+      "avg_cost": 8.1,
+      "avg_quality": 7.428571428571429,
+      "translator_count": 1,
+      "avg_forecast": 0.5399999999999999
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 4.88,
+      "avg_quality": 8.0,
+      "translator_count": 2,
+      "avg_forecast": 0.31
+    },
+    "Spanish (US)": {
+      "task_count": 3,
+      "avg_cost": 5.853333333333334,
+      "avg_quality": 6.0,
+      "translator_count": 3,
+      "avg_forecast": 0.43333333333333335
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 5,
+      "avg_cost": 1.982,
+      "avg_quality": 8.4,
+      "translator_count": 2,
+      "avg_forecast": 0.08600000000000001
+    },
+    "Spanish (Argentina)": {
+      "task_count": 5,
+      "avg_cost": 10.84,
+      "avg_quality": 7.0,
+      "translator_count": 3,
+      "avg_forecast": 0.9199999999999999
+    },
+    "Catalan": {
+      "task_count": 9,
+      "avg_cost": 4.886666666666667,
+      "avg_quality": 6.777777777777778,
+      "translator_count": 3,
+      "avg_forecast": 0.3611111111111111
+    },
+    "Basque": {
+      "task_count": 1,
+      "avg_cost": 6.5,
+      "avg_quality": 9.0,
+      "translator_count": 1,
+      "avg_forecast": 0.5
+    }
+  },
+  "Catalan": {
+    "German": {
+      "task_count": 10,
+      "avg_cost": 194.55800000000002,
+      "avg_quality": 7.8,
+      "translator_count": 3,
+      "avg_forecast": 5.984
+    },
+    "Spanish (Iberian)": {
+      "task_count": 176,
+      "avg_cost": 105.31659090909092,
+      "avg_quality": 6.8977272727272725,
+      "translator_count": 51,
+      "avg_forecast": 5.856761363636363
+    },
+    "English": {
+      "task_count": 149,
+      "avg_cost": 133.8326174496644,
+      "avg_quality": 7.375838926174497,
+      "translator_count": 21,
+      "avg_forecast": 4.963624161073825
+    },
+    "Italian": {
+      "task_count": 3,
+      "avg_cost": 182.23333333333335,
+      "avg_quality": 7.666666666666667,
+      "translator_count": 1,
+      "avg_forecast": 5.206666666666667
+    },
+    "Catalan": {
+      "task_count": 226,
+      "avg_cost": 23.441858407079646,
+      "avg_quality": 6.929203539823009,
+      "translator_count": 48,
+      "avg_forecast": 1.5624778761061948
+    },
+    "English (US)": {
+      "task_count": 12,
+      "avg_cost": 132.48499999999999,
+      "avg_quality": 7.833333333333333,
+      "translator_count": 5,
+      "avg_forecast": 4.8358333333333325
+    },
+    "English (UK)": {
+      "task_count": 3,
+      "avg_cost": 305.61333333333334,
+      "avg_quality": 8.0,
+      "translator_count": 2,
+      "avg_forecast": 10.49
+    },
+    "Spanish (Global)": {
+      "task_count": 118,
+      "avg_cost": 63.889406779661016,
+      "avg_quality": 6.822033898305085,
+      "translator_count": 31,
+      "avg_forecast": 3.622796610169492
+    },
+    "French": {
+      "task_count": 8,
+      "avg_cost": 79.60999999999999,
+      "avg_quality": 6.625,
+      "translator_count": 4,
+      "avg_forecast": 2.76125
+    },
+    "Valencian": {
+      "task_count": 10,
+      "avg_cost": 691.762,
+      "avg_quality": 6.7,
+      "translator_count": 4,
+      "avg_forecast": 37.943000000000005
+    },
+    "Galician": {
+      "task_count": 4,
+      "avg_cost": 124.2,
+      "avg_quality": 8.5,
+      "translator_count": 3,
+      "avg_forecast": 5.4
+    },
+    "Russian": {
+      "task_count": 5,
+      "avg_cost": 178.068,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 4.686
+    },
+    "Spanish (LA)": {
+      "task_count": 2,
+      "avg_cost": 13.235,
+      "avg_quality": 7.5,
+      "translator_count": 2,
+      "avg_forecast": 0.8
+    }
+  },
+  "Portuguese (Iberian)": {
+    "Catalan": {
+      "task_count": 7,
+      "avg_cost": 11.488571428571428,
+      "avg_quality": 6.0,
+      "translator_count": 3,
+      "avg_forecast": 0.8285714285714286
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 3,
+      "avg_cost": 17.86,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 1,
+      "avg_forecast": 0.94
+    },
+    "English": {
+      "task_count": 56,
+      "avg_cost": 299.49375000000003,
+      "avg_quality": 7.142857142857143,
+      "translator_count": 11,
+      "avg_forecast": 9.787142857142856
+    },
+    "Spanish (Iberian)": {
+      "task_count": 20,
+      "avg_cost": 65.60249999999999,
+      "avg_quality": 6.45,
+      "translator_count": 8,
+      "avg_forecast": 4.5115
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 20.54,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 1.58
+    }
+  },
+  "Portuguese (Brazil)": {
+    "Spanish (Mexico)": {
+      "task_count": 5,
+      "avg_cost": 18.774,
+      "avg_quality": 6.2,
+      "translator_count": 3,
+      "avg_forecast": 1.1420000000000001
+    },
+    "Spanish (LA)": {
+      "task_count": 157,
+      "avg_cost": 41.618343949044586,
+      "avg_quality": 7.445859872611465,
+      "translator_count": 14,
+      "avg_forecast": 2.4403821656050955
+    },
+    "English": {
+      "task_count": 87,
+      "avg_cost": 513.9989655172415,
+      "avg_quality": 7.0344827586206895,
+      "translator_count": 14,
+      "avg_forecast": 20.43528735632184
+    },
+    "English (US)": {
+      "task_count": 10,
+      "avg_cost": 205.77399999999997,
+      "avg_quality": 6.9,
+      "translator_count": 6,
+      "avg_forecast": 5.609
+    },
+    "Spanish (Iberian)": {
+      "task_count": 7,
+      "avg_cost": 52.184285714285714,
+      "avg_quality": 7.0,
+      "translator_count": 6,
+      "avg_forecast": 2.9342857142857146
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 5,
+      "avg_cost": 86.66600000000001,
+      "avg_quality": 8.4,
+      "translator_count": 4,
+      "avg_forecast": 6.642
+    },
+    "Spanish (Global)": {
+      "task_count": 2,
+      "avg_cost": 267.045,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 14.055000000000001
+    }
+  },
+  "French": {
+    "Spanish (Iberian)": {
+      "task_count": 967,
+      "avg_cost": 68.87364012409513,
+      "avg_quality": 7.2792140641158225,
+      "translator_count": 66,
+      "avg_forecast": 4.88005170630817
+    },
+    "Spanish (LA)": {
+      "task_count": 34,
+      "avg_cost": 55.67117647058824,
+      "avg_quality": 7.294117647058823,
+      "translator_count": 14,
+      "avg_forecast": 5.886176470588235
+    },
+    "German": {
+      "task_count": 12,
+      "avg_cost": 159.71749999999997,
+      "avg_quality": 6.666666666666667,
+      "translator_count": 8,
+      "avg_forecast": 3.8433333333333324
+    },
+    "Italian": {
+      "task_count": 14,
+      "avg_cost": 169.1157142857143,
+      "avg_quality": 6.785714285714286,
+      "translator_count": 8,
+      "avg_forecast": 6.847142857142857
+    },
+    "English": {
+      "task_count": 33,
+      "avg_cost": 155.64606060606062,
+      "avg_quality": 7.484848484848484,
+      "translator_count": 11,
+      "avg_forecast": 5.160909090909091
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 34,
+      "avg_cost": 49.96058823529411,
+      "avg_quality": 7.4411764705882355,
+      "translator_count": 6,
+      "avg_forecast": 3.3747058823529414
+    },
+    "French (Switzerland)": {
+      "task_count": 1,
+      "avg_cost": 10.4,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 0.26
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 2,
+      "avg_cost": 44.415,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 2.115
+    },
+    "Arabic": {
+      "task_count": 1,
+      "avg_cost": 95.54,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 2.81
+    },
+    "Catalan": {
+      "task_count": 21,
+      "avg_cost": 31.92,
+      "avg_quality": 7.238095238095238,
+      "translator_count": 6,
+      "avg_forecast": 2.3819047619047615
+    },
+    "French": {
+      "task_count": 5,
+      "avg_cost": 36.8,
+      "avg_quality": 7.2,
+      "translator_count": 3,
+      "avg_forecast": 2.05
+    },
+    "Spanish (Global)": {
+      "task_count": 30,
+      "avg_cost": 95.08566666666668,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 13,
+      "avg_forecast": 7.816333333333334
+    }
+  },
+  "Spanish (LA)": {
+    "Spanish (LA)": {
+      "task_count": 27,
+      "avg_cost": 30.51703703703704,
+      "avg_quality": 6.851851851851852,
+      "translator_count": 10,
+      "avg_forecast": 1.8237037037037038
+    },
+    "Spanish (Iberian)": {
+      "task_count": 40,
+      "avg_cost": 186.79675,
+      "avg_quality": 6.85,
+      "translator_count": 25,
+      "avg_forecast": 11.165
+    },
+    "English (US)": {
+      "task_count": 6,
+      "avg_cost": 78.75500000000001,
+      "avg_quality": 6.833333333333333,
+      "translator_count": 4,
+      "avg_forecast": 3.03
+    },
+    "English": {
+      "task_count": 164,
+      "avg_cost": 187.9856707317073,
+      "avg_quality": 7.280487804878049,
+      "translator_count": 28,
+      "avg_forecast": 5.914207317073171
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 31,
+      "avg_cost": 27.48193548387097,
+      "avg_quality": 7.838709677419355,
+      "translator_count": 8,
+      "avg_forecast": 2.2506451612903224
+    },
+    "Spanish (US)": {
+      "task_count": 3,
+      "avg_cost": 7.75,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 2,
+      "avg_forecast": 0.4166666666666667
+    },
+    "Guaran\u00ed": {
+      "task_count": 5,
+      "avg_cost": 68.488,
+      "avg_quality": 6.4,
+      "translator_count": 1,
+      "avg_forecast": 4.892
+    },
+    "Aymara": {
+      "task_count": 1,
+      "avg_cost": 30.590000000000003,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 1.33
+    },
+    "Catalan": {
+      "task_count": 1,
+      "avg_cost": 5.61,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 0.33
+    },
+    "Quiche": {
+      "task_count": 15,
+      "avg_cost": 144.14400000000003,
+      "avg_quality": 6.866666666666666,
+      "translator_count": 2,
+      "avg_forecast": 5.046
+    },
+    "Quechua": {
+      "task_count": 2,
+      "avg_cost": 101.72000000000001,
+      "avg_quality": 5.5,
+      "translator_count": 2,
+      "avg_forecast": 4.835
+    },
+    "Spanish (Global)": {
+      "task_count": 1,
+      "avg_cost": 7.14,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 0.42
+    }
+  },
+  "Spanish (Mexico)": {
+    "Spanish (LA)": {
+      "task_count": 23,
+      "avg_cost": 525.9539130434782,
+      "avg_quality": 6.608695652173913,
+      "translator_count": 9,
+      "avg_forecast": 47.63565217391305
+    },
+    "English": {
+      "task_count": 4,
+      "avg_cost": 6.7675,
+      "avg_quality": 6.25,
+      "translator_count": 4,
+      "avg_forecast": 0.465
+    },
+    "Spanish (Mexico)": {
+      "task_count": 1,
+      "avg_cost": 9.28,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 0.58
+    },
+    "English (US)": {
+      "task_count": 1,
+      "avg_cost": 10.0,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 0.5
+    }
+  },
+  "Basque": {
+    "Spanish (Iberian)": {
+      "task_count": 3,
+      "avg_cost": 250.76,
+      "avg_quality": 6.0,
+      "translator_count": 2,
+      "avg_forecast": 11.299999999999999
+    },
+    "Basque": {
+      "task_count": 3,
+      "avg_cost": 0.6466666666666667,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 3,
+      "avg_forecast": 0.03333333333333333
+    },
+    "Spanish (Global)": {
+      "task_count": 1,
+      "avg_cost": 8.1,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 0.3
+    },
+    "English": {
+      "task_count": 1,
+      "avg_cost": 283.5,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 13.5
+    }
+  },
+  "Dutch": {
+    "Spanish (Iberian)": {
+      "task_count": 82,
+      "avg_cost": 77.8401219512195,
+      "avg_quality": 6.865853658536586,
+      "translator_count": 13,
+      "avg_forecast": 2.1193902439024392
+    },
+    "English": {
+      "task_count": 6,
+      "avg_cost": 113.74333333333334,
+      "avg_quality": 6.333333333333333,
+      "translator_count": 3,
+      "avg_forecast": 2.5383333333333336
+    },
+    "Spanish (Global)": {
+      "task_count": 5,
+      "avg_cost": 30.82,
+      "avg_quality": 7.4,
+      "translator_count": 2,
+      "avg_forecast": 1.34
+    },
+    "Catalan": {
+      "task_count": 1,
+      "avg_cost": 23.25,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 0.75
+    }
+  },
+  "Spanish (Global)": {
+    "Galician": {
+      "task_count": 6,
+      "avg_cost": 154.15666666666667,
+      "avg_quality": 6.5,
+      "translator_count": 5,
+      "avg_forecast": 11.555
+    },
+    "Spanish (Global)": {
+      "task_count": 7,
+      "avg_cost": 17.245714285714286,
+      "avg_quality": 7.428571428571429,
+      "translator_count": 6,
+      "avg_forecast": 1.6614285714285715
+    },
+    "Catalan": {
+      "task_count": 211,
+      "avg_cost": 58.121516587677725,
+      "avg_quality": 7.1753554502369665,
+      "translator_count": 48,
+      "avg_forecast": 3.9794786729857825
+    },
+    "Italian": {
+      "task_count": 28,
+      "avg_cost": 16.776785714285715,
+      "avg_quality": 7.0,
+      "translator_count": 8,
+      "avg_forecast": 0.7571428571428572
+    },
+    "Portuguese (Brazil)": {
+      "task_count": 33,
+      "avg_cost": 19.434848484848487,
+      "avg_quality": 6.909090909090909,
+      "translator_count": 7,
+      "avg_forecast": 0.8812121212121211
+    },
+    "English": {
+      "task_count": 228,
+      "avg_cost": 431.63684210526316,
+      "avg_quality": 7.048245614035087,
+      "translator_count": 33,
+      "avg_forecast": 9.25578947368421
+    },
+    "French": {
+      "task_count": 23,
+      "avg_cost": 117.57695652173913,
+      "avg_quality": 6.260869565217392,
+      "translator_count": 9,
+      "avg_forecast": 5.870000000000001
+    },
+    "Spanish (Iberian)": {
+      "task_count": 12,
+      "avg_cost": 74.01583333333333,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 12,
+      "avg_forecast": 4.333333333333335
+    },
+    "Polish": {
+      "task_count": 5,
+      "avg_cost": 66.80799999999999,
+      "avg_quality": 3.8,
+      "translator_count": 3,
+      "avg_forecast": 2.408
+    },
+    "Quiche": {
+      "task_count": 178,
+      "avg_cost": 93.8744382022472,
+      "avg_quality": 6.977528089887641,
+      "translator_count": 14,
+      "avg_forecast": 8.567247191011235
+    },
+    "German": {
+      "task_count": 63,
+      "avg_cost": 938.9841269841269,
+      "avg_quality": 6.777777777777778,
+      "translator_count": 3,
+      "avg_forecast": 23.17349206349207
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 22,
+      "avg_cost": 47.865,
+      "avg_quality": 7.409090909090909,
+      "translator_count": 7,
+      "avg_forecast": 2.63590909090909
+    },
+    "Quechua": {
+      "task_count": 33,
+      "avg_cost": 110.41030303030304,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 8,
+      "avg_forecast": 3.588181818181818
+    },
+    "Basque": {
+      "task_count": 9,
+      "avg_cost": 18.385555555555555,
+      "avg_quality": 7.111111111111111,
+      "translator_count": 6,
+      "avg_forecast": 0.8088888888888889
+    },
+    "Guaran\u00ed": {
+      "task_count": 3,
+      "avg_cost": 78.50333333333333,
+      "avg_quality": 7.0,
+      "translator_count": 2,
+      "avg_forecast": 2.453333333333333
+    },
+    "Russian": {
+      "task_count": 2,
+      "avg_cost": 269.675,
+      "avg_quality": 7.5,
+      "translator_count": 1,
+      "avg_forecast": 7.705
+    }
+  },
+  "English (UK)": {
+    "English (UK)": {
+      "task_count": 3,
+      "avg_cost": 7.743333333333333,
+      "avg_quality": 7.666666666666667,
+      "translator_count": 2,
+      "avg_forecast": 0.37666666666666665
+    },
+    "English (US)": {
+      "task_count": 1,
+      "avg_cost": 934.62,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 25.26
+    },
+    "Spanish (Iberian)": {
+      "task_count": 20,
+      "avg_cost": 81.73049999999999,
+      "avg_quality": 6.95,
+      "translator_count": 9,
+      "avg_forecast": 5.1085
+    },
+    "Spanish (LA)": {
+      "task_count": 2,
+      "avg_cost": 6.435,
+      "avg_quality": 5.5,
+      "translator_count": 2,
+      "avg_forecast": 0.475
+    },
+    "Spanish (Global)": {
+      "task_count": 2,
+      "avg_cost": 73.385,
+      "avg_quality": 7.0,
+      "translator_count": 2,
+      "avg_forecast": 5.065
+    }
+  },
+  "Spanish (SOURCE)": {
+    "English": {
+      "task_count": 6,
+      "avg_cost": 17.226666666666667,
+      "avg_quality": 8.333333333333334,
+      "translator_count": 4,
+      "avg_forecast": 0.6
+    }
+  },
+  "Galician": {
+    "English (US)": {
+      "task_count": 2,
+      "avg_cost": 1197.9950000000001,
+      "avg_quality": 6.5,
+      "translator_count": 1,
+      "avg_forecast": 38.645
+    },
+    "English": {
+      "task_count": 29,
+      "avg_cost": 626.6589655172414,
+      "avg_quality": 7.241379310344827,
+      "translator_count": 12,
+      "avg_forecast": 18.968620689655175
+    },
+    "Spanish (LA)": {
+      "task_count": 1,
+      "avg_cost": 34.72,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 2.17
+    },
+    "Spanish (Iberian)": {
+      "task_count": 3,
+      "avg_cost": 3.0,
+      "avg_quality": 7.0,
+      "translator_count": 2,
+      "avg_forecast": 0.2333333333333333
+    },
+    "Spanish (Global)": {
+      "task_count": 2,
+      "avg_cost": 0.7600000000000001,
+      "avg_quality": 7.5,
+      "translator_count": 2,
+      "avg_forecast": 0.045000000000000005
+    }
+  },
+  "Russian": {
+    "Spanish (Iberian)": {
+      "task_count": 9,
+      "avg_cost": 160.07555555555555,
+      "avg_quality": 8.444444444444445,
+      "translator_count": 4,
+      "avg_forecast": 4.774444444444445
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 5,
+      "avg_cost": 73.586,
+      "avg_quality": 6.8,
+      "translator_count": 3,
+      "avg_forecast": 2.488
+    },
+    "Spanish (Global)": {
+      "task_count": 7,
+      "avg_cost": 107.76857142857143,
+      "avg_quality": 6.857142857142857,
+      "translator_count": 1,
+      "avg_forecast": 3.991428571428571
+    },
+    "Spanish (LA)": {
+      "task_count": 1,
+      "avg_cost": 6.12,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 0.17
+    },
+    "English": {
+      "task_count": 2,
+      "avg_cost": 60.6,
+      "avg_quality": 6.5,
+      "translator_count": 1,
+      "avg_forecast": 1.5150000000000001
+    }
+  },
+  "Greek": {
+    "English": {
+      "task_count": 2,
+      "avg_cost": 81.64,
+      "avg_quality": 8.5,
+      "translator_count": 2,
+      "avg_forecast": 1.7000000000000002
+    },
+    "Greek": {
+      "task_count": 1,
+      "avg_cost": 90.0,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 3.0
+    }
+  },
+  "Arabic": {
+    "Spanish (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 306.145,
+      "avg_quality": 6.0,
+      "translator_count": 2,
+      "avg_forecast": 9.2
+    }
+  },
+  "Portuguese (SOURCE)": {
+    "English": {
+      "task_count": 4,
+      "avg_cost": 503.115,
+      "avg_quality": 7.0,
+      "translator_count": 3,
+      "avg_forecast": 26.7775
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 17.625,
+      "avg_quality": 7.5,
+      "translator_count": 2,
+      "avg_forecast": 1.125
+    }
+  },
+  "Quechua": {
+    "Quechua": {
+      "task_count": 2,
+      "avg_cost": 225.5,
+      "avg_quality": 8.5,
+      "translator_count": 1,
+      "avg_forecast": 5.5
+    },
+    "English": {
+      "task_count": 2,
+      "avg_cost": 44.85,
+      "avg_quality": 7.5,
+      "translator_count": 1,
+      "avg_forecast": 1.495
+    }
+  },
+  "Polish": {
+    "English (US)": {
+      "task_count": 1,
+      "avg_cost": 46.0,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 1.0
+    },
+    "English": {
+      "task_count": 1,
+      "avg_cost": 208.4,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 5.21
+    },
+    "Spanish (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 44.375,
+      "avg_quality": 5.5,
+      "translator_count": 2,
+      "avg_forecast": 1.375
+    }
+  },
+  "Persian": {
+    "Spanish (LA)": {
+      "task_count": 1,
+      "avg_cost": 4.8,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 0.3
+    }
+  },
+  "Korean": {
+    "English (US)": {
+      "task_count": 1,
+      "avg_cost": 148.4,
+      "avg_quality": 5.0,
+      "translator_count": 1,
+      "avg_forecast": 3.71
+    }
+  },
+  "French (Canadian)": {
+    "Spanish (Global)": {
+      "task_count": 1,
+      "avg_cost": 13.44,
+      "avg_quality": 9.0,
+      "translator_count": 1,
+      "avg_forecast": 1.12
+    }
+  },
+  "Danish": {
+    "Spanish (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 5.994999999999999,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 0.545
+    },
+    "English": {
+      "task_count": 1,
+      "avg_cost": 18.19,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 1.07
+    }
+  },
+  "Slovak": {
+    "English": {
+      "task_count": 1,
+      "avg_cost": 265.31,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 6.17
+    }
+  },
+  "Chinese (Simplified)": {
+    "Spanish (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 437.565,
+      "avg_quality": 3.0,
+      "translator_count": 2,
+      "avg_forecast": 8.685
+    }
+  },
+  "Estonian": {
+    "Quiche": {
+      "task_count": 3,
+      "avg_cost": 6.346666666666667,
+      "avg_quality": 7.333333333333333,
+      "translator_count": 1,
+      "avg_forecast": 0.37333333333333335
+    },
+    "Quechua": {
+      "task_count": 2,
+      "avg_cost": 26.22,
+      "avg_quality": 6.5,
+      "translator_count": 1,
+      "avg_forecast": 0.69
+    },
+    "Spanish (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 20.5,
+      "avg_quality": 5.0,
+      "translator_count": 2,
+      "avg_forecast": 1.25
+    },
+    "Basque": {
+      "task_count": 1,
+      "avg_cost": 95.91,
+      "avg_quality": 8.0,
+      "translator_count": 1,
+      "avg_forecast": 4.17
+    },
+    "Valencian": {
+      "task_count": 1,
+      "avg_cost": 2.34,
+      "avg_quality": 5.0,
+      "translator_count": 1,
+      "avg_forecast": 0.09
+    },
+    "Portuguese (Iberian)": {
+      "task_count": 5,
+      "avg_cost": 18.194,
+      "avg_quality": 7.4,
+      "translator_count": 1,
+      "avg_forecast": 1.654
+    }
+  },
+  "Swedish": {
+    "Spanish (Iberian)": {
+      "task_count": 9,
+      "avg_cost": 197.22777777777776,
+      "avg_quality": 6.888888888888889,
+      "translator_count": 4,
+      "avg_forecast": 3.724444444444445
+    }
+  },
+  "Czech": {
+    "English": {
+      "task_count": 1,
+      "avg_cost": 60.900000000000006,
+      "avg_quality": 9.0,
+      "translator_count": 1,
+      "avg_forecast": 1.05
+    },
+    "Spanish (Iberian)": {
+      "task_count": 2,
+      "avg_cost": 57.81,
+      "avg_quality": 7.5,
+      "translator_count": 2,
+      "avg_forecast": 1.08
+    }
+  },
+  "Japanese": {
+    "Spanish (Iberian)": {
+      "task_count": 1,
+      "avg_cost": 56.1,
+      "avg_quality": 6.0,
+      "translator_count": 1,
+      "avg_forecast": 1.7
+    }
+  },
+  "Norwegian": {
+    "Spanish (Iberian)": {
+      "task_count": 1,
+      "avg_cost": 201.6,
+      "avg_quality": 7.0,
+      "translator_count": 1,
+      "avg_forecast": 3.36
+    },
+    "Norwegian": {
+      "task_count": 1,
+      "avg_cost": 97.5,
+      "avg_quality": 5.0,
+      "translator_count": 1,
+      "avg_forecast": 2.5
+    }
+  }
+}
