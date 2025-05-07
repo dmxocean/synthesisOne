@@ -4,6 +4,16 @@ import altair as alt
 import json
 import random
 from statistics import mean
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).absolute().parent.parent
+
+folder_path = PROJECT_ROOT / "data" / "processed" / "base" / "artifacts"
+translator_metrics_path = folder_path / "translator_metrics.json"
+translator_hourly_rates_path = folder_path / "translator_hourly_rates.json"
+
+rates   = json.load(translator_hourly_rates_path.open())
+metrics = json.load(translator_metrics_path.open())
 
 # -- Page config and CSS styling --
 st.set_page_config(page_title="Translator Assignment", layout="wide")
@@ -56,9 +66,7 @@ for key, default in [('new_tasks', pd.DataFrame()), ('suggestions', {}), ('assig
 
 # -- Load translators --
 @st.cache_data
-def load_translators(rates_file='translator_hourly_rates.json', metrics_file='translator_metrics.json'):
-    rates = json.load(open(rates_file))
-    metrics = json.load(open(metrics_file))
+def load_translators(rates, metrics):
     data = {}
     for name, pairs in rates.items():
         if name == '__global_average__': continue
@@ -79,7 +87,7 @@ def load_translators(rates_file='translator_hourly_rates.json', metrics_file='tr
         data[name] = {'languages':langs,'mean_rate':mean_rate,'quality':quality,'sector_history':m_entry.get('sector_history',{}),'task_type_history':m_entry.get('task_type_history',{}),'lang_pairs':pairs}
     return data
 
-translator_data = load_translators()
+translator_data = load_translators(rates,metrics)
 translator_df = pd.DataFrame([
     {'name':n,'quality':translator_data[n]['quality'] or 0,'mean_rate':translator_data[n]['mean_rate'] or 0,'sectors':list(translator_data[n]['sector_history'].keys()),'task_types':list(translator_data[n]['task_type_history'].keys()),'languages':[lang for tgts in translator_data[n]['languages'].values() for lang in tgts]}
     for n in translator_data
@@ -242,4 +250,4 @@ with tab3:
     if n1.button("Previous") and st.session_state.page_idx>0: st.session_state.page_idx-=1
     if n2.button("Next") and st.session_state.page_idx<(tot-1)//ps: st.session_state.page_idx+=1
     st.write(f"Showing {st.session_state.page_idx*ps+1}-{min((st.session_state.page_idx+1)*ps,tot)} of {tot}")
-# -- End of app --
+
