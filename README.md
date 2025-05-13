@@ -17,55 +17,9 @@ This approach not only improves operational efficiency but also enhances transla
 ```
 ❯ tree
 .
-├── README.md
-├── data
-│   ├── interim
-│   │   ├── README.md
-│   │   ├── logs
-│   │   │   └── ...
-│   │   ├── mergedAll.csv
-│   │   ├── sourceLanguages.json
-│   │   ├── targetLanguages.json
-│   │   └── translatorLanguages.json
-│   ├── processed
-│   │   ├── DL
-│   │   ├── ML
-│   │   └── SAT
-│   └── raw
-│       ├── clients.csv
-│       ├── data.csv
-│       ├── data.xlsx
-│       ├── schedules.csv
-│       └── translatorsCostPairs.csv
-├── deliveries
-│   └── presentation.pdf
-├── info
-│   ├── insightsPresentation.md
-│   ├── projectManagement.md
-│   ├── projectQuestions.md
-│   ├── projectSchedule.md
-│   └── projectTasks.md
-├── models
-│   ├── SAT
-│   ├── DL
-│   └── ML
-├── notebooks
-│   └── data_analysis.ipynb
-├── src
-│   ├── data
-│   │   ├── mergeCSVs.py
-│   │   ├── processCSVs.py
-│   │   ├── processCSVs.py
-│   │   ├── splitExcel.py
-│   │   └── ...
-│   ├── models
-│   │   └── ...
-│   ├── pipeline
-│   └── web
-└── utils
-    ├── logging.py
-    ├── merge.py
-    └── time.py
+
+TODO
+
 ```
 
 ## Datasets and Data Analysis

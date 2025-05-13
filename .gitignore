@@ -28,6 +28,17 @@ sandbox/
 data/interim/**/*.csv
 data/processed/**/*.csv
 
+models/**/*.pkl
+models/**/*.txt
+models/**/*.json
+
+results/**/*.txt
+results/**/*.png
+results/**/*.json
+results/**/*.csv
+
+logs/**/*.log
+
 # Operating system files
 .DS_Store
 Thumbs.db
