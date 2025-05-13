@@ -25,7 +25,6 @@ tests/
 sandbox/
 .private/
 .secrets/
-data/interim/**/*.csv
 data/processed/**/*.csv
 
 models/**/*.pkl
