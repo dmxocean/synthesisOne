@@ -5,12 +5,17 @@ import json
 import random
 from statistics import mean
 from pathlib import Path
+from datetime import datetime, timedelta
+import os
 
 PROJECT_ROOT = Path(__file__).absolute().parent.parent
 
 folder_path = PROJECT_ROOT / "data" / "processed" / "base" / "artifacts"
+translator_schedule_path = PROJECT_ROOT / "data" / "src" / "prediction" / "translator_schedule.json"
 translator_metrics_path = folder_path / "translator_metrics.json"
 translator_hourly_rates_path = folder_path / "translator_hourly_rates.json"
+DATA_DIR = PROJECT_ROOT / "data" / "src" / "prediction"
+SCHEDULE_FILE = DATA_DIR / "translator_schedule.json"
 
 rates   = json.load(translator_hourly_rates_path.open())
 metrics = json.load(translator_metrics_path.open())
@@ -30,34 +35,78 @@ st.markdown(
     </style>
     """, unsafe_allow_html=True)
 
-# -- Callbacks for button actions --
+
+def load_schedule():
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    if SCHEDULE_FILE.exists():
+        try:
+            return json.loads(SCHEDULE_FILE.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+def save_schedule(schedule: dict):
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    text = json.dumps(schedule, indent=2)
+    with open(SCHEDULE_FILE, "w", encoding="utf-8") as f:
+        f.write(text)
+        f.flush()
+        os.fsync(f.fileno())
+
+
+# -- Assign --
 def assign_task(task_id, name):
-    df = st.session_state.new_tasks
-    if 'TASK_ID' not in df.columns:
-        return
-    mask = df['TASK_ID'] == task_id
-    if not mask.any():
-        return
-    task_row = df[mask].iloc[0]
-    task_name = task_row.get('Task Name', str(task_id))
-    # record assignment
-    st.session_state.assigned.append({
-        'Task Name': task_name,
-        'Due': task_row['Due'],
-        'translator': name,
-        'suggested': [t for t in st.session_state.suggestions.get(task_id, []) if t != name]
+    row = st.session_state.raw_tasks.loc[
+        st.session_state.raw_tasks["TASK_ID"].astype(str) == str(task_id)
+    ].iloc[0]
+    start_dt = datetime.fromisoformat(row["START"])
+    end_dt   = start_dt + timedelta(hours=float(row["FORECAST"]))
+
+    sched = load_schedule()
+    sched.setdefault(name, []).append({
+        "task_id": int(task_id),
+        "start":   start_dt.isoformat(),
+        "end":     end_dt.isoformat(),
     })
-    # drop the assigned task and reset index for display
-    st.session_state.new_tasks = df[~mask].reset_index(drop=True)
-    # remove suggestions for this task only
+    save_schedule(sched)
+
+    st.session_state.assigned.append({
+        "Task Name":  row.get("Task Name", str(task_id)),
+        "Due":        row["Due"],
+        "translator": name,
+        "suggested":  [t for t in st.session_state.suggestions.get(task_id, []) if t != name]
+    })
+    st.session_state.new_tasks = st.session_state.new_tasks[
+        st.session_state.new_tasks["TASK_ID"] != task_id
+    ].reset_index(drop=True)
     st.session_state.suggestions.pop(task_id, None)
 
+# -- Reassign --
 def reassign_task(index, name):
-    entry = st.session_state.assigned[index]
-    old = entry['translator']
-    entry['translator'] = name
-    entry['suggested'].append(old)
-    entry['suggested'].remove(name)
+    entry   = st.session_state.assigned[index]
+    old     = entry["translator"]
+    task_id = entry["Task Name"]
+
+    sched = load_schedule()
+    sched[old] = [t for t in sched.get(old, []) if t["task_id"] != int(task_id)]
+
+    row = st.session_state.raw_tasks.loc[
+        st.session_state.raw_tasks["TASK_ID"].astype(str) == str(task_id)
+    ].iloc[0]
+    start_dt = datetime.fromisoformat(row["START"])
+    end_dt   = start_dt + timedelta(hours=float(row["FORECAST"]))
+
+    sched.setdefault(name, []).append({
+        "task_id": int(task_id),
+        "start":   start_dt.isoformat(),
+        "end":     end_dt.isoformat(),
+    })
+    save_schedule(sched)
+
+    entry["translator"] = name
+    entry["suggested"].append(old)
+    entry["suggested"].remove(name)
+
 
 # -- Initialize session state --
 for key, default in [
@@ -120,22 +169,16 @@ d_max = float(translator_df['mean_rate'].max() or 100)
 st.session_state.filters['rate'] = (0.0, d_max)
 
 # -- run_scheduler for suggestions based on historical tasks --
-def run_scheduler(historical_tasks, model_names):
-    # If no historical tasks, return empty
-    if historical_tasks is None or historical_tasks.empty:
-        return {}
-    assignments = {}
+def run_scheduler(csv_file, model_names):
+    if hasattr(csv_file, "seek"):
+        csv_file.seek(0)
+    df = pd.read_csv(csv_file)
+    df['TASK_ID'] = df['TASK_ID'].astype(str)
     names = list(translator_data.keys())
-    # Choose sorting column: prefer END, fallback to Due
-    if 'END' in historical_tasks.columns:
-        sort_col = 'END'
-    elif 'Due' in historical_tasks.columns:
-        sort_col = 'Due'
-    else:
-        sort_col = historical_tasks.columns[0]
-    for _, row in historical_tasks.sort_values(sort_col).iterrows():
-        task_id = row['TASK_ID']
-        assignments[task_id] = random.sample(names, 5)
+    assignments = {}
+    sort_col = 'END' if 'END' in df.columns else 'START'
+    for _, row in df.sort_values(sort_col).iterrows():
+        assignments[row['TASK_ID']] = random.sample(names, 5)
     return assignments
 
 # -- Tabs setup --
@@ -179,20 +222,20 @@ with tab1:
     # Model selection (always visible)
     models = st.multiselect(
         "Select Suggestion Models:",
-        ["SAT", "ML", "DL"],
+        ["SAT", "ML"],
         default=st.session_state.models
     )
     st.session_state.models = models
 
     # Suggest button (always visible)
     if st.button("Suggest"):
-        if st.session_state.raw_tasks.empty:
+        if uploaded is None:
             st.warning("Please upload a CSV before generating suggestions.")
         elif not st.session_state.models:
             st.warning("Select at least one model to generate suggestions.")
         else:
             assignments = run_scheduler(
-                st.session_state.raw_tasks,
+                uploaded,
                 model_names=[m.lower() for m in st.session_state.models]
             )
             st.session_state.suggestions.update(assignments)
