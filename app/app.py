@@ -63,129 +63,177 @@ def save_schedule(schedule: dict):
         f.flush()
         os.fsync(f.fileno())
 
+# Helper to recompute suggestions with availability filtering
+def recompute_suggestions():
+    """
+    Recompute suggestions only for tasks still unassigned, filtering out translators
+    who are already booked at the task times.
+    Also prune new_tasks to exclude any tasks already in the schedule.
+    """
+    if 'uploaded_file' not in st.session_state or not st.session_state.models:
+        return
+    # Load schedule and get assigned task IDs
+    sched = load_schedule()
+    assigned_ids = {t['task_id'] for tasks in sched.values() for t in tasks}
+    # Prune new_tasks DataFrame
+    st.session_state.new_tasks = (
+        st.session_state.new_tasks
+        .loc[~st.session_state.new_tasks['TASK_ID'].astype(int).isin(assigned_ids)]
+        .reset_index(drop=True)
+    )
+    # Remaining task IDs as strings
+    remaining_ids = st.session_state.new_tasks['TASK_ID'].astype(str).tolist()
+    # Load full CSV, filter to remaining tasks before prediction
+    csv_file = st.session_state.uploaded_file
+    if hasattr(csv_file, 'seek'):
+        csv_file.seek(0)
+    df_all = pd.read_csv(csv_file)
+    df_all['TASK_ID'] = df_all['TASK_ID'].astype(str)
+    df_batch = df_all[df_all['TASK_ID'].isin(remaining_ids)]
+    # Run prediction only on filtered batch
+    try:
+        raw_sugg = run_prediction_system(
+            df_batch,
+            model_names=[m.lower() for m in st.session_state.models],
+            top_k=5
+        )
+    except Exception as e:
+        st.error(f"Error generating suggestions: {e}")
+        return
+    # Normalize raw_sugg keys
+    normalized = {}
+    for raw_key, entries in raw_sugg.items():
+        tid = raw_key.split()[-1]
+        if tid in remaining_ids:
+            normalized[tid] = entries
+    # Helper to check availability
+    def is_available(translator: str, start: datetime, end: datetime) -> bool:
+        for task in sched.get(translator, []):
+            s = datetime.fromisoformat(task['start'])
+            e = datetime.fromisoformat(task['end'])
+            if s < end and start < e:
+                return False
+        return True
+    # Build filtered suggestions
+    filtered_sugg = {}
+    for tid, entries in normalized.items():
+        # Get time bounds
+        row = st.session_state.raw_tasks.loc[
+            st.session_state.raw_tasks['TASK_ID'].astype(str) == tid
+        ].iloc[0]
+        start_dt = datetime.fromisoformat(row['START'])
+        end_dt = start_dt + timedelta(hours=float(row['FORECAST']))
+        # Filter by availability
+        allowed = [e for e in entries if is_available(e['translator'], start_dt, end_dt)]
+        if allowed:
+            filtered_sugg[tid] = allowed
+    st.session_state.suggestions = filtered_sugg
 
 # -- Assign --
 def assign_task(task_id, name):
     row = st.session_state.raw_tasks.loc[
-        st.session_state.raw_tasks["TASK_ID"].astype(str) == str(task_id)
+        st.session_state.raw_tasks['TASK_ID'].astype(str) == str(task_id)
     ].iloc[0]
-    start_dt = datetime.fromisoformat(row["START"])
-    end_dt   = start_dt + timedelta(hours=float(row["FORECAST"]))
+    start_dt = datetime.fromisoformat(row['START'])
+    end_dt   = start_dt + timedelta(hours=float(row['FORECAST']))
 
     suggestion_entries = st.session_state.suggestions.get(task_id, [])
-    max_raw = max((e["score"] for e in suggestion_entries), default=1)
+    max_raw = max((e['score'] for e in suggestion_entries), default=1)
     remaining_opts = [
         {
-            "translator": e["translator"],
-            "raw_score":  e["score"],
-            "norm_score": round((e["score"]/max_raw*10)*2)/2
+            'translator': e['translator'],
+            'raw_score':  e['score'],
+            'norm_score': round((e['score']/max_raw*10)*2)/2
         }
-        for e in suggestion_entries if e["translator"] != name
+        for e in suggestion_entries if e['translator'] != name
     ]
 
     sched = load_schedule()
     existing = sched.get(name, [])
     new_entry = {
-        "task_id":     int(task_id),
-        "start":       start_dt.isoformat(),
-        "end":         end_dt.isoformat(),
-        "alternatives": remaining_opts
+        'task_id': int(task_id),
+        'start':   start_dt.isoformat(),
+        'end':     end_dt.isoformat(),
+        'alternatives': remaining_opts
     }
-    if not any(t.get("task_id") == new_entry["task_id"] for t in existing):
+    if not any(t['task_id'] == new_entry['task_id'] for t in existing):
         sched.setdefault(name, []).append(new_entry)
     else:
         for t in existing:
-            if t.get("task_id") == new_entry["task_id"]:
+            if t['task_id'] == new_entry['task_id']:
                 t.update(new_entry)
     save_schedule(sched)
 
     st.session_state.assigned.append({
-        "Task Name":  row.get("Task Name", str(task_id)),
-        "Due":        row["Due"],
-        "translator": name,
-        "suggested":  [opt for opt in remaining_opts if opt["translator"] != name]
+        'Task Name': row.get('Task Name', str(task_id)),
+        'Due':       row['Due'],
+        'translator': name,
+        'suggested': remaining_opts
     })
 
+    # Remove from new_tasks and suggestions
     st.session_state.new_tasks = st.session_state.new_tasks[
-        st.session_state.new_tasks["TASK_ID"] != task_id
+        st.session_state.new_tasks['TASK_ID'] != task_id
     ].reset_index(drop=True)
     st.session_state.suggestions.pop(task_id, None)
 
-    if 'uploaded_file' in st.session_state and st.session_state.models:
-        new_sugg = run_scheduler(
-            st.session_state.uploaded_file,
-            model_names=[m.lower() for m in st.session_state.models]
-        )
-        remaining_ids = st.session_state.new_tasks["TASK_ID"].tolist()
-        st.session_state.suggestions = {
-            tid: entries for tid, entries in new_sugg.items() if tid in remaining_ids
-        }
-
+    # Recompute for remaining tasks
+    recompute_suggestions()
 
 # -- Reassign --
 def reassign_task(index, name):
-    entry   = st.session_state.assigned[index]
-    old     = entry["translator"]
-    task_id = entry["Task Name"]
+    entry = st.session_state.assigned[index]
+    old = entry['translator']
+    task_id = entry['Task Name']
 
-    # Remove from old translator's schedule
+    # Remove from old schedule
     sched = load_schedule()
     old_list = sched.get(old, [])
-    removed_item = None
     for i, t in enumerate(old_list):
-        if t.get("task_id") == int(task_id):
-            removed_item = old_list.pop(i)
+        if t['task_id'] == int(task_id):
+            removed = old_list.pop(i)
             break
     sched[old] = old_list
 
-    # Prepare new alternatives list
-    new_alts = removed_item.get("alternatives", []) if removed_item else []
-    new_alts.append({"translator": old, "raw_score": None, "norm_score": None})
+    # Prepare alternatives, adding the old translator back
+    new_alts = removed.get('alternatives', [])
+    new_alts.append({'translator': old, 'raw_score': None, 'norm_score': None})
 
-    # Compute time bounds for the task
+    # Time bounds
     row = st.session_state.raw_tasks.loc[
-        st.session_state.raw_tasks["TASK_ID"].astype(str) == str(task_id)
+        st.session_state.raw_tasks['TASK_ID'].astype(str) == str(task_id)
     ].iloc[0]
-    start_dt = datetime.fromisoformat(row["START"])
-    end_dt   = start_dt + timedelta(hours=float(row["FORECAST"]))
+    start_dt = datetime.fromisoformat(row['START'])
+    end_dt   = start_dt + timedelta(hours=float(row['FORECAST']))
 
-    # Assign to new translator, updating JSON without duplicates
+    # Assign to new translator
     existing = sched.get(name, [])
     new_entry = {
-        "task_id":     int(task_id),
-        "start":       start_dt.isoformat(),
-        "end":         end_dt.isoformat(),
-        "alternatives": new_alts
+        'task_id':     int(task_id),
+        'start':       start_dt.isoformat(),
+        'end':         end_dt.isoformat(),
+        'alternatives': new_alts
     }
-    if not any(t.get("task_id") == new_entry["task_id"] for t in existing):
+    if not any(t['task_id'] == new_entry['task_id'] for t in existing):
         sched.setdefault(name, []).append(new_entry)
     else:
         for t in existing:
-            if t.get("task_id") == new_entry["task_id"]:
+            if t['task_id'] == new_entry['task_id']:
                 t.update(new_entry)
     save_schedule(sched)
 
-    # Update session_state for Assigned Tasks UI
-    entry["translator"] = name
-    entry["suggested"]  = [opt for opt in new_alts if opt["translator"] != name]
+    # Update UI state
+    entry['translator'] = name
+    entry['suggested']  = [opt for opt in new_alts if opt['translator'] != name]
 
-    # Ensure the task stays removed from New Tasks
+    # Keep removed from new_tasks and suggestions
     st.session_state.new_tasks = st.session_state.new_tasks[
-        st.session_state.new_tasks["TASK_ID"].astype(str) != str(task_id)
+        st.session_state.new_tasks['TASK_ID'].astype(str) != str(task_id)
     ].reset_index(drop=True)
-    # Remove any leftover suggestions for this task
     st.session_state.suggestions.pop(task_id, None)
 
-    # Recompute suggestions for remaining tasks
-    if 'uploaded_file' in st.session_state and st.session_state.models:
-        new_sugg = run_scheduler(
-            st.session_state.uploaded_file,
-            model_names=[m.lower() for m in st.session_state.models]
-        )
-        remaining_ids = st.session_state.new_tasks["TASK_ID"].tolist()
-        st.session_state.suggestions = {
-            tid: entries for tid, entries in new_sugg.items() if tid in remaining_ids
-        }
+    # Recompute for remaining tasks
+    recompute_suggestions()
 
 # -- Initialize session state --
 for key, default in [
