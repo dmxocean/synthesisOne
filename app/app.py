@@ -2,23 +2,33 @@ import streamlit as st
 import pandas as pd
 import altair as alt
 import json
-import random
+import os
 from statistics import mean
 from pathlib import Path
 from datetime import datetime, timedelta
-import os
+import importlib.util
 
+# Resolve paths
 PROJECT_ROOT = Path(__file__).absolute().parent.parent
+DATA_DIR = PROJECT_ROOT / "src" / "prediction"
 
+# Load constraints.py from DATA_DIR
+constraints_path = DATA_DIR / "constraints.py"
+spec = importlib.util.spec_from_file_location("constraints", str(constraints_path))
+constraints = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(constraints)
+run_prediction_system = constraints.run_prediction_system
+
+# Paths for static data
 folder_path = PROJECT_ROOT / "data" / "processed" / "base" / "artifacts"
-translator_schedule_path = PROJECT_ROOT / "data" / "src" / "prediction" / "translator_schedule.json"
+translator_schedule_path = DATA_DIR / "translator_schedule.json"
 translator_metrics_path = folder_path / "translator_metrics.json"
 translator_hourly_rates_path = folder_path / "translator_hourly_rates.json"
-DATA_DIR = PROJECT_ROOT / "data" / "src" / "prediction"
-SCHEDULE_FILE = DATA_DIR / "translator_schedule.json"
+SCHEDULE_FILE = translator_schedule_path
 
-rates   = json.load(translator_hourly_rates_path.open())
-metrics = json.load(translator_metrics_path.open())
+# Load JSON files
+rates = json.load(translator_hourly_rates_path.open(encoding="utf-8"))
+metrics = json.load(translator_metrics_path.open(encoding="utf-8"))
 
 # -- Page config and CSS styling --
 st.set_page_config(page_title="Translator Assignment", layout="wide")
@@ -45,11 +55,11 @@ def load_schedule():
             return {}
     return {}
 
+
 def save_schedule(schedule: dict):
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    text = json.dumps(schedule, indent=2)
     with open(SCHEDULE_FILE, "w", encoding="utf-8") as f:
-        f.write(text)
+        json.dump(schedule, f, indent=2)
         f.flush()
         os.fsync(f.fileno())
 
@@ -62,24 +72,55 @@ def assign_task(task_id, name):
     start_dt = datetime.fromisoformat(row["START"])
     end_dt   = start_dt + timedelta(hours=float(row["FORECAST"]))
 
+    suggestion_entries = st.session_state.suggestions.get(task_id, [])
+    max_raw = max((e["score"] for e in suggestion_entries), default=1)
+    remaining_opts = [
+        {
+            "translator": e["translator"],
+            "raw_score":  e["score"],
+            "norm_score": round((e["score"]/max_raw*10)*2)/2
+        }
+        for e in suggestion_entries if e["translator"] != name
+    ]
+
     sched = load_schedule()
-    sched.setdefault(name, []).append({
-        "task_id": int(task_id),
-        "start":   start_dt.isoformat(),
-        "end":     end_dt.isoformat(),
-    })
+    existing = sched.get(name, [])
+    new_entry = {
+        "task_id":     int(task_id),
+        "start":       start_dt.isoformat(),
+        "end":         end_dt.isoformat(),
+        "alternatives": remaining_opts
+    }
+    if not any(t.get("task_id") == new_entry["task_id"] for t in existing):
+        sched.setdefault(name, []).append(new_entry)
+    else:
+        for t in existing:
+            if t.get("task_id") == new_entry["task_id"]:
+                t.update(new_entry)
     save_schedule(sched)
 
     st.session_state.assigned.append({
         "Task Name":  row.get("Task Name", str(task_id)),
         "Due":        row["Due"],
         "translator": name,
-        "suggested":  [t for t in st.session_state.suggestions.get(task_id, []) if t != name]
+        "suggested":  [opt for opt in remaining_opts if opt["translator"] != name]
     })
+
     st.session_state.new_tasks = st.session_state.new_tasks[
         st.session_state.new_tasks["TASK_ID"] != task_id
     ].reset_index(drop=True)
     st.session_state.suggestions.pop(task_id, None)
+
+    if 'uploaded_file' in st.session_state and st.session_state.models:
+        new_sugg = run_scheduler(
+            st.session_state.uploaded_file,
+            model_names=[m.lower() for m in st.session_state.models]
+        )
+        remaining_ids = st.session_state.new_tasks["TASK_ID"].tolist()
+        st.session_state.suggestions = {
+            tid: entries for tid, entries in new_sugg.items() if tid in remaining_ids
+        }
+
 
 # -- Reassign --
 def reassign_task(index, name):
@@ -87,26 +128,64 @@ def reassign_task(index, name):
     old     = entry["translator"]
     task_id = entry["Task Name"]
 
+    # Remove from old translator's schedule
     sched = load_schedule()
-    sched[old] = [t for t in sched.get(old, []) if t["task_id"] != int(task_id)]
+    old_list = sched.get(old, [])
+    removed_item = None
+    for i, t in enumerate(old_list):
+        if t.get("task_id") == int(task_id):
+            removed_item = old_list.pop(i)
+            break
+    sched[old] = old_list
 
+    # Prepare new alternatives list
+    new_alts = removed_item.get("alternatives", []) if removed_item else []
+    new_alts.append({"translator": old, "raw_score": None, "norm_score": None})
+
+    # Compute time bounds for the task
     row = st.session_state.raw_tasks.loc[
         st.session_state.raw_tasks["TASK_ID"].astype(str) == str(task_id)
     ].iloc[0]
     start_dt = datetime.fromisoformat(row["START"])
     end_dt   = start_dt + timedelta(hours=float(row["FORECAST"]))
 
-    sched.setdefault(name, []).append({
-        "task_id": int(task_id),
-        "start":   start_dt.isoformat(),
-        "end":     end_dt.isoformat(),
-    })
+    # Assign to new translator, updating JSON without duplicates
+    existing = sched.get(name, [])
+    new_entry = {
+        "task_id":     int(task_id),
+        "start":       start_dt.isoformat(),
+        "end":         end_dt.isoformat(),
+        "alternatives": new_alts
+    }
+    if not any(t.get("task_id") == new_entry["task_id"] for t in existing):
+        sched.setdefault(name, []).append(new_entry)
+    else:
+        for t in existing:
+            if t.get("task_id") == new_entry["task_id"]:
+                t.update(new_entry)
     save_schedule(sched)
 
+    # Update session_state for Assigned Tasks UI
     entry["translator"] = name
-    entry["suggested"].append(old)
-    entry["suggested"].remove(name)
+    entry["suggested"]  = [opt for opt in new_alts if opt["translator"] != name]
 
+    # Ensure the task stays removed from New Tasks
+    st.session_state.new_tasks = st.session_state.new_tasks[
+        st.session_state.new_tasks["TASK_ID"].astype(str) != str(task_id)
+    ].reset_index(drop=True)
+    # Remove any leftover suggestions for this task
+    st.session_state.suggestions.pop(task_id, None)
+
+    # Recompute suggestions for remaining tasks
+    if 'uploaded_file' in st.session_state and st.session_state.models:
+        new_sugg = run_scheduler(
+            st.session_state.uploaded_file,
+            model_names=[m.lower() for m in st.session_state.models]
+        )
+        remaining_ids = st.session_state.new_tasks["TASK_ID"].tolist()
+        st.session_state.suggestions = {
+            tid: entries for tid, entries in new_sugg.items() if tid in remaining_ids
+        }
 
 # -- Initialize session state --
 for key, default in [
@@ -174,12 +253,25 @@ def run_scheduler(csv_file, model_names):
         csv_file.seek(0)
     df = pd.read_csv(csv_file)
     df['TASK_ID'] = df['TASK_ID'].astype(str)
-    names = list(translator_data.keys())
-    assignments = {}
-    sort_col = 'END' if 'END' in df.columns else 'START'
-    for _, row in df.sort_values(sort_col).iterrows():
-        assignments[row['TASK_ID']] = random.sample(names, 5)
-    return assignments
+
+    try:
+        raw_suggestions = run_prediction_system(
+            df,
+            model_names=[m.lower() for m in model_names],
+            top_k=5
+        )
+    except Exception as e:
+        st.error(f"Error generating suggestions: {e}")
+        return {}
+
+    # Keys may come back as "PROJECT_ID TASK_ID" — strip off the PROJECT_ID
+    normalized: dict[str, list] = {}
+    for raw_key, entries in raw_suggestions.items():
+        task_id = raw_key.split()[-1]   # take last token
+        normalized[task_id] = entries
+        
+    print(normalized)
+    return normalized
 
 # -- Tabs setup --
 tab1, tab2, tab3 = st.tabs(["New Tasks", "Assigned Tasks", "Translators"])
@@ -222,7 +314,7 @@ with tab1:
     # Model selection (always visible)
     models = st.multiselect(
         "Select Suggestion Models:",
-        ["SAT", "ML"],
+        ["sat", "ranking"],
         default=st.session_state.models
     )
     st.session_state.models = models
@@ -238,39 +330,71 @@ with tab1:
                 uploaded,
                 model_names=[m.lower() for m in st.session_state.models]
             )
-            st.session_state.suggestions.update(assignments)
+            st.session_state.suggestions = assignments
+            # remember for later re‐runs
+            st.session_state.uploaded_file = uploaded
 
     # Display tasks and their suggestions
-    # only show tasks that still have suggestions
     if not st.session_state.new_tasks.empty:
         for _, task in st.session_state.new_tasks.iterrows():
             tid, due = task['TASK_ID'], task['Due']
-            sugg = st.session_state.suggestions.get(tid, [])
-            if not sugg:
-                continue  # skip tasks without suggestions
+            suggestion_entries = st.session_state.suggestions.get(tid, [])
+            if not suggestion_entries:
+                continue
+
+            # Task header
             st.markdown(
-                f"<div class='task-card'><strong>{tid}</strong> — due {due.strftime('%Y-%m-%d %H:%M') if pd.notna(due) else 'N/A'}</div>",
+                f"<div class='task-card'><strong>{tid}</strong> — due "
+                f"{due.strftime('%Y-%m-%d %H:%M') if pd.notna(due) else 'N/A'}</div>",
                 unsafe_allow_html=True
             )
+
+            # Normalize scores (highest→10), round to .5
+            max_raw = max(e["score"] for e in suggestion_entries)
             cols = st.columns(2)
-            for i, name in enumerate(sugg):
+            for i, entry in enumerate(suggestion_entries):
+                name = entry["translator"]
+                raw  = entry["score"]
+                norm = round((raw / max_raw * 10) * 2) / 2
+                score_str = f"{norm:.1f}"
+                info = translator_data[name]
+                rate_str = f"{info['mean_rate']:.1f}" if info['mean_rate'] is not None else "N/A"
+                qual_str = f"{info['quality']:.1f}" if info['quality'] is not None else "N/A"
+
                 with cols[i % 2]:
-                    info = translator_data[name]
-                    rate_str = f"{info['mean_rate']:.1f}" if info['mean_rate'] is not None else "N/A"
-                    qual_str = f"{info['quality']:.1f}" if info['quality'] is not None else "N/A"
                     st.markdown(
-                        f"<div class='translator-card'><div style='font-weight:600;color:#000;'>{name}</div>"
-                        f"<div>Quality: {qual_str}/10<br>Rate: €{rate_str}/hr</div></div>",
+                        f"<div class='translator-card'>"
+                          f"<div style='font-weight:600;color:#000;'>{name}</div>"
+                          f"<div>Score: {score_str}/10<br>"
+                          f"Quality: {qual_str}/10<br>"
+                          f"Rate: €{rate_str}/hr</div>"
+                        f"</div>",
                         unsafe_allow_html=True
                     )
                     with st.expander(f"More info about {name}"):
-                        df_sec = pd.DataFrame({'Sector': list(info['sector_history'].keys()), 'Count': list(info['sector_history'].values())})
-                        df_tt = pd.DataFrame({'Task Type': list(info['task_type_history'].keys()), 'Count': list(info['task_type_history'].values())})
+                        df_sec = pd.DataFrame({
+                            'Sector': list(info['sector_history'].keys()),
+                            'Count':  list(info['sector_history'].values())
+                        })
+                        df_tt = pd.DataFrame({
+                            'Task Type': list(info['task_type_history'].keys()),
+                            'Count':     list(info['task_type_history'].values())
+                        })
                         c1, c2 = st.columns(2)
                         if not df_sec.empty:
-                            c1.altair_chart(alt.Chart(df_sec).mark_arc().encode(theta='Count:Q', color='Sector:N'), use_container_width=True)
+                            c1.altair_chart(
+                                alt.Chart(df_sec)
+                                   .mark_arc()
+                                   .encode(theta='Count:Q', color='Sector:N'),
+                                use_container_width=True
+                            )
                         if not df_tt.empty:
-                            c2.altair_chart(alt.Chart(df_tt).mark_arc().encode(theta='Count:Q', color='Task Type:N'), use_container_width=True)
+                            c2.altair_chart(
+                                alt.Chart(df_tt)
+                                   .mark_arc()
+                                   .encode(theta='Count:Q', color='Task Type:N'),
+                                use_container_width=True
+                            )
                     st.button(
                         f"Assign {name}",
                         key=f"assign_{tid}_{name}",
@@ -280,11 +404,12 @@ with tab1:
     else:
         st.info("No new tasks loaded. Upload a CSV to begin.")
 
+
 # --- Assigned Tasks ---
 with tab2:
     st.header("Assigned Tasks")
     if st.session_state.assigned:
-        for i, entry in enumerate(sorted(st.session_state.assigned, key=lambda x: x['Due'])):
+        for i, entry in enumerate(st.session_state.assigned):
             tn, due, tr = entry['Task Name'], entry['Due'], entry['translator']
             st.markdown(
                 f"<div class='task-card assigned-card'><strong>{tn}</strong> — due {due.strftime('%Y-%m-%d %H:%M') if pd.notna(due) else 'N/A'}<br>"
@@ -292,18 +417,22 @@ with tab2:
             )
             with st.expander("View & reassign suggestions"):
                 cols = st.columns(2)
-                for j, name in enumerate(entry['suggested']):
+                for j, opt in enumerate(entry['suggested']):
+                    name = opt['translator']
+                    score = opt.get('norm_score', 'N/A')
+                    info = translator_data[name]
+                    rate_str = f"{info['mean_rate']:.1f}" if info['mean_rate'] is not None else "N/A"
+                    qual_str = f"{info['quality']:.1f}" if info['quality'] is not None else "N/A"
                     with cols[j % 2]:
-                        info = translator_data[name]
-                        rate_str = f"{info['mean_rate']:.1f}" if info['mean_rate'] is not None else "N/A"
-                        qual_str = f"{info['quality']:.1f}" if info['quality'] is not None else "N/A"
                         st.markdown(
                             f"<div class='translator-card'><div style='font-weight:600;color:#000;'>{name}</div>"
-                            f"<div>Quality: {qual_str}/10<br>Rate: €{rate_str}/hr</div></div>", unsafe_allow_html=True
+                            f"<div>Score: {score}/10<br>Quality: {qual_str}/10<br>Rate: €{rate_str}/hr</div></div>",
+                            unsafe_allow_html=True
                         )
                         st.button(f"Reassign to {name}", key=f"reassign_{i}_{name}", on_click=reassign_task, args=(i,name))
     else:
         st.info("No tasks assigned yet.")
+
 
 # --- Translators ---
 with tab3:
