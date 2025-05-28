@@ -359,15 +359,23 @@ with tab1:
             st.session_state.new_tasks = df_raw[['TASK_ID', 'Due']]
 
 
-    # Model selection (always visible)
+    # Model selection
+    LABELS = {
+    "sat": "Rule Based",
+    "ranking": "Machine Learning"
+    }
+
+    options = ["sat", "ranking"]
     models = st.multiselect(
         "Select Suggestion Models:",
-        ["sat", "ranking"],
-        default=st.session_state.models
+        options,
+        default=st.session_state.get("models", options),
+        format_func=lambda opt: LABELS.get(opt, opt)
     )
+
     st.session_state.models = models
 
-    # Suggest button (always visible)
+    # Suggest button
     if st.button("Suggest"):
         if uploaded is None:
             st.warning("Please upload a CSV before generating suggestions.")
