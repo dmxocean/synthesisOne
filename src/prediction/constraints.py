@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
 Combined Translator Prediction System
-Takes ML components from predict.py and SAT components from constraints.py
-Calendar/scheduling system remains separate in calender.py
+Fixed to ensure consistent output format from both SAT and ranking models
 """
 
 import pandas as pd
@@ -11,8 +10,9 @@ import os
 import sys
 import json
 import logging
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Optional, Any, Union
 from datetime import datetime, timedelta
+from pathlib import Path
 
 # Path configuration
 PATH_CURRENT = os.path.dirname(os.path.abspath(__file__))
@@ -41,6 +41,21 @@ try:
 except ImportError as e:
     print(f"✗ ML model not available: {e}")
     RANKING_MODEL_AVAILABLE = False
+
+try:
+    from src.prediction.calender import (
+        assign_tasks_from_model_output, 
+        load_translator_schedules, 
+        check_translator_availability_only, 
+        load_translator_calendar,
+        load_translator_calendar_from_data,
+        check_calendar_status
+    )
+    print("✓ Scheduling system imported successfully")
+    SCHEDULER_AVAILABLE = True
+except ImportError as e:
+    print(f"✗ Scheduling system not available: {e}")
+    SCHEDULER_AVAILABLE = False
 
 # Setup logging (from predict.py)
 logging.basicConfig(level=logging.INFO)
@@ -98,7 +113,6 @@ def validate_task_data(df_tasks: pd.DataFrame) -> bool:
     Validate input task data for required columns and data types
     TAKEN FROM predict.py
     """
-    
     missing_columns = []
     for col in MODEL_REQUIRED_COLUMNS:
         if col not in df_tasks.columns:
@@ -139,7 +153,6 @@ def prepare_task_data(df_tasks: pd.DataFrame) -> pd.DataFrame:
     Prepare task data for prediction by ensuring proper data types
     TAKEN FROM predict.py
     """
-
     df_prepared = df_tasks.copy()
 
     # Convert date columns to datetime if needed
@@ -176,9 +189,36 @@ def extract_model_columns(df_tasks: pd.DataFrame) -> pd.DataFrame:
     Extract only the columns needed by the models
     TAKEN FROM predict.py
     """
-
     model_cols = [col for col in MODEL_REQUIRED_COLUMNS if col in df_tasks.columns]
-    return df_tasks[model_cols].copy()
+    result = df_tasks[model_cols].copy()
+    return result
+
+def normalize_sat_results(sat_results: Dict[str, List[Tuple[str, float]]]) -> Dict[str, List[Tuple[str, float]]]:
+    """
+    Normalize SAT model results to use consistent task ID format
+    
+    SAT model returns composite keys like "PROJECT_ID TASK_ID", 
+    but we want just "TASK_ID" to be consistent with ranking model
+    """
+    normalized_results = {}
+    
+    for key, translators in sat_results.items():
+        # Convert key to string
+        key_str = str(key)
+        
+        # Extract just the task ID part
+        if " " in key_str:
+            # Split "PROJECT_ID TASK_ID" format and take just the task ID
+            parts = key_str.split(" ")
+            task_id = parts[-1]  # Take the last part as task ID
+            print(f"🔧 SAT: Normalized '{key_str}' → '{task_id}'")
+        else:
+            # Already in correct format
+            task_id = key_str
+        
+        normalized_results[task_id] = translators
+    
+    return normalized_results
 
 def run_batch_predictions(
     df_tasks: pd.DataFrame,
@@ -187,7 +227,7 @@ def run_batch_predictions(
 ) -> Optional[Dict[str, List[Tuple[str, float]]]]:
     """
     Run predictions for a batch of tasks using specified model
-    TAKEN FROM predict.py with SAT model addition from constraints.py
+    FIXED: Ensures both models return consistent task ID format
     """
 
     if not MODELS_AVAILABLE.get(model_name, False):
@@ -200,10 +240,12 @@ def run_batch_predictions(
         if model_name == "ranking":
             # Extract only columns needed by models (from predict.py)
             df_model_input = extract_model_columns(df_tasks)
-            return run_ranking_inference(
+            result = run_ranking_inference(
                 df_model_input,
                 top_k=top_k
             )
+            print(f"📊 Ranking model returned {len(result)} task predictions")
+            return result
 
         elif model_name == 'sat':
             # SAT model preparation (from constraints.py)
@@ -215,7 +257,14 @@ def run_batch_predictions(
                 if col in df_sat.columns:
                     df_sat[col] = df_sat[col].astype(str)
             
-            return run_sat_inference(df_sat, top_k)
+            raw_result = run_sat_inference(df_sat, top_k)
+            print(f"📊 SAT model returned {len(raw_result)} task predictions (before normalization)")
+            
+            # FIXED: Normalize SAT results to use consistent task ID format
+            normalized_result = normalize_sat_results(raw_result)
+            print(f"🔧 Normalized SAT results to {len(normalized_result)} task predictions")
+            
+            return normalized_result
 
         else:
             logger.error(f"Unknown model name: {model_name}")
@@ -234,49 +283,80 @@ def ensemble_predictions(
 ) -> Dict[str, List[Tuple[str, float]]]:
     """
     Combine predictions from multiple models using weighted ensemble
-    TAKEN DIRECTLY FROM predict.py
+    SIMPLIFIED: No longer needs to handle different task ID formats since they're normalized
     """
-
     logger.info("Ensembling predictions from multiple models")
-
+    
     ensemble_results = {}
-
+    
     # Get all unique task IDs across models
     all_task_ids = set()
     for model_name, results in model_results.items():
         all_task_ids.update(results.keys())
-
+        print(f"📊 {model_name}: {len(results)} tasks")
+    
+    print(f"🔄 Ensembling {len(all_task_ids)} unique tasks")
+    
     for task_id in all_task_ids:
-        translator_scores = {}
-        total_weight = 0.0
-
+        # First normalize scores within each model
+        normalized_model_scores = {}
+        
         for model_name, results in model_results.items():
             if task_id not in results:
                 continue
-
+            
+            # Extract scores for normalization
+            scores = [score for _, score in results[task_id]]
+            if not scores:
+                continue
+            
+            # Normalize scores to range [0, 1] within this model
+            max_score = max(scores)
+            min_score = min(scores)
+            score_range = max_score - min_score
+            
+            if score_range > 0:
+                normalized_scores = [
+                    (translator, (score - min_score) / score_range)
+                    for translator, score in results[task_id]
+                ]
+            else:
+                # If all scores are equal, just use 1.0
+                normalized_scores = [
+                    (translator, 1.0)
+                    for translator, score in results[task_id]
+                ]
+            
+            normalized_model_scores[model_name] = normalized_scores
+        
+        # Now combine normalized scores with weights
+        translator_scores = {}
+        total_weight = 0.0
+        
+        for model_name, normalized_scores in normalized_model_scores.items():
             model_weight = weights.get(model_name, 0.0)
             total_weight += model_weight
-
-            for translator, score in results[task_id]:
+            
+            for translator, score in normalized_scores:
                 if translator not in translator_scores:
                     translator_scores[translator] = 0.0
-
+                
                 translator_scores[translator] += model_weight * score
-
+        
         # Normalize by total weight
         if total_weight > 0:
             for translator in translator_scores:
                 translator_scores[translator] /= total_weight
-
+        
         # Sort by combined score and take top k
         sorted_translators = sorted(
             translator_scores.items(),
             key=lambda x: x[1],
             reverse=True
         )[:top_k]
-
+        
         ensemble_results[task_id] = sorted_translators
-
+    
     logger.info(f"Ensemble completed for {len(ensemble_results)} tasks")
     return ensemble_results
 
@@ -289,7 +369,6 @@ def run_prediction_pipeline(
     Execute the complete prediction pipeline for translator assignment
     TAKEN FROM predict.py with modifications for simple output
     """
-
     logger.info("Starting prediction pipeline")
     logger.info(f"Processing batch of {len(df_tasks)} tasks")
 
@@ -299,7 +378,8 @@ def run_prediction_pipeline(
     if not validate_task_data(df_prepared):
         raise ValueError("Invalid task data provided. Please check the required columns and data types.")
 
-    logger.info(f"Task IDs in batch: {df_prepared['TASK_ID'].tolist()}")
+    task_ids = df_prepared['TASK_ID'].tolist()
+    logger.info(f"Task IDs in batch: {task_ids}")
 
     # Store original data for later reconstruction
     df_original = df_prepared.copy()
@@ -350,17 +430,40 @@ def run_prediction_pipeline(
     return final_results
 
 # CONVERSION TO SIMPLE FORMAT
-def convert_to_simple_format(predictions: Dict[str, List[Tuple[str, float]]]) -> Dict[str, List[str]]:
+def convert_to_simple_format(
+    predictions: Dict[str, List[Union[Tuple[str, float], Dict[str, Any]]]]
+) -> Dict[int, List[Dict[str, float]]]:
     """
-    Convert model predictions to simple format: {task_id: [translator_names]}
+    Convert model predictions (task_id → List[(translator,score)] OR
+    List[{"translator":…, "score":…}]) into simple format
+    (task_id(int) → List[{translator:…, score:…}]).
     """
-    simple_results = {}
+    print("\n🔄 CONVERTING TO SIMPLE FORMAT")
+    print("=" * 50)
     
-    for task_id, translator_score_pairs in predictions.items():
-        # Extract just the translator names, ignore scores
-        translator_names = [translator for translator, score in translator_score_pairs]
-        simple_results[str(task_id)] = translator_names
+    simple_results: Dict[int, List[Dict[str, float]]] = {}
+    for task_id_str, pairs in predictions.items():
+        # 1) convert task_id to int
+        try:
+            tid = int(task_id_str)
+        except (ValueError, TypeError):
+            raise ValueError(f"Invalid task_id '{task_id_str}'; cannot convert to int.")
+        
+        # 2) normalize each entry
+        converted: List[Dict[str, float]] = []
+        for e in pairs:
+            if isinstance(e, dict):
+                # already simple form? just grab keys
+                translator = e.get("translator")
+                score      = e.get("score")
+            else:
+                # assume it's a (translator, score) tuple or list
+                translator, score = e  
+            converted.append({"translator": translator, "score": float(score)})
+        
+        simple_results[tid] = converted
     
+    print(f"✅ Converted {len(simple_results)} tasks to simple format")
     return simple_results
 
 def run_prediction_system(df_tasks: pd.DataFrame, 
@@ -378,11 +481,6 @@ def run_prediction_system(df_tasks: pd.DataFrame,
         Dictionary mapping task IDs to lists of translator names
         Format: {'10988490': ['Leonor', 'David', 'Gerardo', 'Roque Marlene', 'Philipp'], ...}
     """
-    
-    print("="*50)
-    print("TRANSLATOR PREDICTION SYSTEM")
-    print("="*50)
-    
     # Use the prediction pipeline from predict.py
     predictions_with_scores = run_prediction_pipeline(
         df_tasks=df_tasks,
@@ -392,9 +490,6 @@ def run_prediction_system(df_tasks: pd.DataFrame,
     
     # Convert to simple format
     simple_results = convert_to_simple_format(predictions_with_scores)
-    
-    print(f"✓ Generated predictions for {len(simple_results)} tasks")
-    print("="*50)
     
     return simple_results
 
@@ -422,75 +517,301 @@ def create_sample_tasks() -> pd.DataFrame:
     
     return pd.DataFrame(sample_data)
 
+def create_task_rankings_for_scheduler(df_tasks, translator_recommendations):
+    """
+    Convert simple translator recommendations to the format needed by the scheduler
+    
+    Args:
+        df_tasks: Original task DataFrame
+        translator_recommendations: Dictionary from run_prediction_system {task_id: [translators]}
+    
+    Returns:
+        Dictionary mapping task_id to DataFrame of ranked translators with task details
+    """
+    task_rankings = {}
+    
+    for task_id_str, translators in translator_recommendations.items():
+        try:
+            task_id = int(task_id_str)
+                
+            # Find this task in the DataFrame
+            task_row = df_tasks[df_tasks['TASK_ID'] == task_id]
+            if len(task_row) == 0:
+                print(f"Warning: Task ID {task_id} not found in task dataframe")
+                continue
+                
+            task_data = task_row.iloc[0]
+            
+            # Create a DataFrame with all translators for this task
+            rows = []
+            if isinstance(translators, list) and len(translators) > 0:
+                # Check if it's new format with scores or old format with just names
+                if isinstance(translators[0], dict) and 'translator' in translators[0]:
+                    # New format: [{"translator": name, "score": value}, ...]
+                    for entry in translators:
+                        rows.append({
+                            'translator': entry['translator'],
+                            'score': entry.get('score', 0.0),
+                            'start': task_data['START'],
+                            'deadline': task_data['END'],
+                            'forecast': task_data['FORECAST'],
+                            'source_lang': task_data.get('SOURCE_LANG', ''),
+                            'target_lang': task_data.get('TARGET_LANG', ''),
+                            'industry': task_data.get('MANUFACTURER_SECTOR', '')
+                        })
+                else:
+                    # Old format: [translator_name1, translator_name2, ...]
+                    for translator in translators:
+                        rows.append({
+                            'translator': translator,
+                            'score': 0.0,  # Default score for old format
+                            'start': task_data['START'],
+                            'deadline': task_data['END'],
+                            'forecast': task_data['FORECAST'],
+                            'source_lang': task_data.get('SOURCE_LANG', ''),
+                            'target_lang': task_data.get('TARGET_LANG', ''),
+                            'industry': task_data.get('MANUFACTURER_SECTOR', '')
+                        })
+                
+                # Use the original task_id (not the composite key) for the scheduler
+                task_rankings[str(task_id)] = pd.DataFrame(rows)
+                
+        except Exception as e:
+            print(f"Error processing task {task_id_str}: {e}")
+            continue
+    
+    return task_rankings
+
+def get_available_translators(
+    df_tasks: pd.DataFrame,
+    translator_recommendations: Union[str, Dict],
+    calendar_path: Optional[Union[str, Path]] = None
+) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Check which translators are available for each task without making assignments
+    
+    Args:
+        df_tasks: DataFrame with task data
+        translator_recommendations: Either a path to JSON file with assignments or a dictionary
+                                   in format {task_id: [{"translator": name, "score": value}, ...]}
+        calendar_path: Path to existing translator calendar JSON (optional, will use default if None)
+    
+    Returns:
+        Dictionary mapping task_id to lists of available translators with scores
+        Format: {'11240000': [{"translator": "Lincoln", "score": 0.95}, ...], ...}
+    """
+    print(f"\n🔄 CHECKING TRANSLATOR AVAILABILITY")
+    print(f"{'='*50}")
+    
+    # Load recommendations from JSON file if given as path
+    if isinstance(translator_recommendations, str):
+        try:
+            with open(translator_recommendations, 'r', encoding='utf-8') as f:
+                translator_recommendations = json.load(f)
+            print(f"✅ Loaded recommendations from file")
+        except Exception as e:
+            logger.error(f"Failed to load translator recommendations: {e}")
+            return {}
+
+    # Set default calendar path if none provided
+    if calendar_path is None:
+        default_calendar_path = Path(__file__).absolute().parent.parent.parent / "src" / "prediction" / "translator_schedule.json"
+        calendar_path = str(default_calendar_path)
+        print(f"📝 Using default calendar path: {calendar_path}")
+
+    # Load existing calendar with better error handling
+    translator_calendar = {}
+    calendar_path_str = str(calendar_path)
+    if os.path.exists(calendar_path_str):
+        try:
+            translator_calendar = load_translator_calendar(calendar_path_str)
+            
+            # Check calendar status
+            if SCHEDULER_AVAILABLE:
+                status = check_calendar_status(translator_calendar)
+                print(f"📅 Calendar loaded: {status['loaded']}")
+                print(f"📋 Total translators: {status['total_translators']}")
+                print(f"📊 Total assignments: {status['total_assignments']}")
+            else:
+                print(f"📅 Calendar loaded from: {calendar_path_str}")
+                
+        except Exception as e:
+            print(f"❌ Failed to load calendar from {calendar_path_str}: {e}")
+            translator_calendar = {}
+    else:
+        print(f"⚠️  Calendar file not found: {calendar_path_str}")
+        print(f"   Creating empty calendar (all translators will be available)")
+
+    task_rankings: Dict[str, pd.DataFrame] = {}
+    
+    # Build ranking DataFrames per task
+    print(f"\n🔨 Building task rankings for {len(translator_recommendations)} tasks...")
+    for task_id, translators_data in translator_recommendations.items():
+        # Convert task_id to int for DataFrame lookup
+        try:
+            task_id_int = int(task_id)
+        except ValueError:
+            print(f"❌ Invalid task ID format: {task_id}")
+            continue
+        
+        # Find task in DataFrame
+        task_row = df_tasks[df_tasks['TASK_ID'] == task_id_int]
+        if task_row.empty:
+            print(f"⚠️  Task ID {task_id_int} not found in task dataframe")
+            continue
+        
+        task_data = task_row.iloc[0]
+        
+        # Build translator rows
+        rows = []
+        for entry in translators_data:
+            if isinstance(entry, dict) and 'translator' in entry:
+                # New format: {"translator": name, "score": value}
+                rows.append({
+                    'translator': entry['translator'],
+                    'score': entry.get('score', 0.0),
+                    'start': task_data['START'],
+                    'deadline': task_data['END'],
+                    'forecast': task_data['FORECAST'],
+                    'source_lang': task_data.get('SOURCE_LANG', ''),
+                    'target_lang': task_data.get('TARGET_LANG', ''),
+                    'industry': task_data.get('MANUFACTURER_SECTOR', '')
+                })
+            else:
+                # Old format: just translator name
+                rows.append({
+                    'translator': entry,
+                    'score': 0.0,
+                    'start': task_data['START'],
+                    'deadline': task_data['END'],
+                    'forecast': task_data['FORECAST'],
+                    'source_lang': task_data.get('SOURCE_LANG', ''),
+                    'target_lang': task_data.get('TARGET_LANG', ''),
+                    'industry': task_data.get('MANUFACTURER_SECTOR', '')
+                })
+        
+        if rows:
+            task_rankings[str(task_id_int)] = pd.DataFrame(rows)
+            print(f"✅ Task {task_id_int}: {len(rows)} translator candidates")
+
+    # Load weekly schedules
+    translator_schedules = None
+    if SCHEDULER_AVAILABLE:
+        try:
+            translator_schedules = load_translator_schedules()
+            print(f"📅 Loaded translator schedules for {len(translator_schedules)} translators")
+        except Exception as e:
+            print(f"⚠️  Could not load translator schedules: {e}")
+
+    available_translators: Dict[str, List[Dict[str, Any]]] = {}
+    
+    # Check availability for each task
+    print(f"\n🔍 Checking availability for {len(task_rankings)} tasks...")
+    for task_id_str, df_ranks in task_rankings.items():
+        available_for_task = []
+        total_candidates = len(df_ranks)
+        
+        for _, row in df_ranks.iterrows():
+            rec = row.to_dict()
+            rec['task_id'] = task_id_str
+            
+            try:
+                if SCHEDULER_AVAILABLE:
+                    is_available = check_translator_availability_only(
+                        rec, translator_calendar, translator_schedules
+                    )
+                else:
+                    # If scheduler not available, assume all translators are available
+                    is_available = True
+                    
+                if is_available:
+                    available_for_task.append({
+                        'translator': rec['translator'], 
+                        'score': rec['score']
+                    })
+            except Exception as e:
+                print(f"❌ Error checking availability for {rec['translator']}: {e}")
+                # On error, assume not available
+                continue
+        
+        available_translators[task_id_str] = available_for_task
+        print(f"   Task {task_id_str}: {len(available_for_task)}/{total_candidates} translators available")
+    
+    print(f"\n✅ Availability check completed!")
+    print(f"📊 Summary: {len(available_translators)} tasks processed")
+    print(available_translators)
+    available_translators = convert_to_simple_format(available_translators)
+    return available_translators
+
 def main():
-    """Test the combined prediction system"""
-    print("🚀 TESTING COMBINED TRANSLATOR PREDICTION SYSTEM")
-    print("="*60)
-    
+    """Generate available translators JSON for each model"""
     # Show system status
-    print(f"\nSystem Status:")
-    print(f"✓ SAT Model: {SAT_MODEL_AVAILABLE}")
-    print(f"✓ ML Model: {RANKING_MODEL_AVAILABLE}")
-    
     if not (SAT_MODEL_AVAILABLE or RANKING_MODEL_AVAILABLE):
-        print("\n❌ No models available. Please check imports.")
+        print("No prediction models available. Please check imports.")
+        return
+    
+    if not SCHEDULER_AVAILABLE:
+        print("Scheduling system not available. Cannot check translator availability.")
         return
     
     # Create sample data
     sample_tasks = create_sample_tasks()
-    print(f"\nCreated {len(sample_tasks)} sample tasks for testing")
     
-    try:
-        # Test different model combinations
-        test_scenarios = []
-        
-        if SAT_MODEL_AVAILABLE:
-            test_scenarios.append(("SAT Only", ["sat"]))
-        
-        if RANKING_MODEL_AVAILABLE:
-            test_scenarios.append(("ML Only", ["ranking"]))
-        
-        if SAT_MODEL_AVAILABLE and RANKING_MODEL_AVAILABLE:
-            test_scenarios.append(("Both Models (Ensemble)", ["sat", "ranking"]))
-        
-        for scenario_name, models in test_scenarios:
-            print(f"\n🧪 Testing: {scenario_name}")
-            print("-" * 40)
-            
-            results = run_prediction_system(
-                sample_tasks, 
-                model_names=models, 
-                top_k=5
+    # Define the models to test
+    models_to_test = []
+    
+    if SAT_MODEL_AVAILABLE:
+        models_to_test.append(("SAT Only", ["sat"]))
+    
+    if RANKING_MODEL_AVAILABLE:
+        models_to_test.append(("ML Only", ["ranking"]))
+    
+    if SAT_MODEL_AVAILABLE and RANKING_MODEL_AVAILABLE:
+        models_to_test.append(("Both Models (Ensemble)", ["sat", "ranking"]))
+    
+    # Test each model and generate availability JSON
+    for scenario_name, model_names in models_to_test:
+        try:
+            # Get raw predictions with scores
+            raw_predictions = run_prediction_pipeline(
+                df_tasks=sample_tasks,
+                top_k=10,  # Get more recommendations to have a better pool
+                models_to_use=model_names
             )
             
-            if results:
-                print(f"✅ {scenario_name}: Generated predictions for {len(results)} tasks")
-                
-                # Show sample results in the requested format
-                print("Sample results (requested format):")
-                sample_count = 0
-                for task_id, translators in results.items():
-                    if sample_count < 3:  # Show first 3
-                        print(f"  '{task_id}': {translators}")
-                        sample_count += 1
-                
-                # Save full results
-                output_file = f"predictions_{scenario_name.lower().replace(' ', '_').replace('(', '').replace(')', '')}.json"
-                with open(output_file, 'w') as f:
-                    json.dump(results, f, indent=4)
-                print(f"📄 Full results saved to: {output_file}")
-                
-            else:
-                print(f"❌ {scenario_name}: No predictions generated")
+            if not raw_predictions:
+                print(f"{scenario_name}: No predictions generated")
+                continue
+            
+            # Convert to new format with scores
+            predictions_with_scores = convert_to_simple_format(raw_predictions)
+            
+            # Check translator availability (with scores)
+            available_translators = get_available_translators(
+                sample_tasks,
+                predictions_with_scores
+            )
+            
+            if not available_translators:
+                print(f"{scenario_name}: No availability results generated")
+                continue
+            
+            # Save availability results
+            availability_file = f"available_translators_{scenario_name.lower().replace(' ', '_').replace('(', '').replace(')', '')}.json"
+            with open(availability_file, 'w') as f:
+                json.dump(available_translators, f, indent=4)
+            print(f"Saved to: {availability_file}")
+            
+        except Exception as e:
+            print(f"Error processing {scenario_name}: {e}")
+            import traceback
+            traceback.print_exc()
     
-    except Exception as e:
-        print(f"❌ Error during testing: {e}")
-        import traceback
-        traceback.print_exc()
-    
-    print(f"\n{'='*60}")
-    print("🎯 TESTING COMPLETE!")
-    print("="*60)
+    # Print a summary of generated files
+    print("\nGenerated availability files:")
+    import glob
+    for file in sorted(glob.glob("available_translators_*.json")):
+        print(f"  - {file}")
 
 if __name__ == '__main__':
     main()

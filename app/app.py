@@ -17,7 +17,10 @@ constraints_path = DATA_DIR / "constraints.py"
 spec = importlib.util.spec_from_file_location("constraints", str(constraints_path))
 constraints = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(constraints)
-run_prediction_system = constraints.run_prediction_system
+# Bring in prediction and availability functions
+run_prediction_pipeline = constraints.run_prediction_pipeline
+get_available_translators = constraints.get_available_translators
+convert_to_simple_format = constraints.convert_to_simple_format
 
 # Paths for static data
 folder_path = PROJECT_ROOT / "data" / "processed" / "base" / "artifacts"
@@ -70,69 +73,55 @@ def recompute_suggestions():
     who are already booked at the task times.
     Also prune new_tasks to exclude any tasks already in the schedule.
     """
+    # Ensure we have models and an uploaded file
     if 'uploaded_file' not in st.session_state or not st.session_state.models:
         return
-    # Load schedule and get assigned task IDs
+
+    # Load schedule and get assigned task IDs as strings
     sched = load_schedule()
-    assigned_ids = {t['task_id'] for tasks in sched.values() for t in tasks}
-    # Prune new_tasks DataFrame
+    assigned_ids = {str(t['task_id']) for tasks in sched.values() for t in tasks}
+
+    # Prune new_tasks DataFrame by TASK_ID strings
     st.session_state.new_tasks = (
         st.session_state.new_tasks
-        .loc[~st.session_state.new_tasks['TASK_ID'].astype(int).isin(assigned_ids)]
+        .loc[~st.session_state.new_tasks['TASK_ID'].isin(assigned_ids)]
         .reset_index(drop=True)
     )
+
     # Remaining task IDs as strings
-    remaining_ids = st.session_state.new_tasks['TASK_ID'].astype(str).tolist()
-    # Load full CSV, filter to remaining tasks before prediction
+    remaining_ids = st.session_state.new_tasks['TASK_ID'].tolist()
+
+    # Filter previous suggestions to only these tasks
+    filtered_recs = {
+        tid: recs
+        for tid, recs in st.session_state.suggestions.items()
+        if tid in remaining_ids
+    }
+
+    # Reload raw CSV and filter to remaining tasks
     csv_file = st.session_state.uploaded_file
     if hasattr(csv_file, 'seek'):
         csv_file.seek(0)
-    df_all = pd.read_csv(csv_file)
-    df_all['TASK_ID'] = df_all['TASK_ID'].astype(str)
+    # Read TASK_ID as string to maintain consistency
+    df_all = pd.read_csv(csv_file, dtype={'TASK_ID': int})
     df_batch = df_all[df_all['TASK_ID'].isin(remaining_ids)]
-    # Run prediction only on filtered batch
+
+    # Use availability checker on existing recommendations
     try:
-        raw_sugg = run_prediction_system(
+        st.session_state.suggestions = get_available_translators(
             df_batch,
-            model_names=[m.lower() for m in st.session_state.models],
-            top_k=5
+            filtered_recs,
+            calendar_path=str(SCHEDULE_FILE)
         )
     except Exception as e:
-        st.error(f"Error generating suggestions: {e}")
+        st.error(f"Error checking translator availability: {e}")
         return
-    # Normalize raw_sugg keys
-    normalized = {}
-    for raw_key, entries in raw_sugg.items():
-        tid = raw_key.split()[-1]
-        if tid in remaining_ids:
-            normalized[tid] = entries
-    # Helper to check availability
-    def is_available(translator: str, start: datetime, end: datetime) -> bool:
-        for task in sched.get(translator, []):
-            s = datetime.fromisoformat(task['start'])
-            e = datetime.fromisoformat(task['end'])
-            if s < end and start < e:
-                return False
-        return True
-    # Build filtered suggestions
-    filtered_sugg = {}
-    for tid, entries in normalized.items():
-        # Get time bounds
-        row = st.session_state.raw_tasks.loc[
-            st.session_state.raw_tasks['TASK_ID'].astype(str) == tid
-        ].iloc[0]
-        start_dt = datetime.fromisoformat(row['START'])
-        end_dt = start_dt + timedelta(hours=float(row['FORECAST']))
-        # Filter by availability
-        allowed = [e for e in entries if is_available(e['translator'], start_dt, end_dt)]
-        if allowed:
-            filtered_sugg[tid] = allowed
-    st.session_state.suggestions = filtered_sugg
+
 
 # -- Assign --
 def assign_task(task_id, name):
     row = st.session_state.raw_tasks.loc[
-        st.session_state.raw_tasks['TASK_ID'].astype(str) == str(task_id)
+        st.session_state.raw_tasks['TASK_ID'].astype(int) == int(task_id)
     ].iloc[0]
     start_dt = datetime.fromisoformat(row['START'])
     end_dt   = start_dt + timedelta(hours=float(row['FORECAST']))
@@ -201,7 +190,7 @@ def reassign_task(index, name):
 
     # Time bounds
     row = st.session_state.raw_tasks.loc[
-        st.session_state.raw_tasks['TASK_ID'].astype(str) == str(task_id)
+        st.session_state.raw_tasks['TASK_ID'].astype(int) == int(task_id)
     ].iloc[0]
     start_dt = datetime.fromisoformat(row['START'])
     end_dt   = start_dt + timedelta(hours=float(row['FORECAST']))
@@ -228,7 +217,7 @@ def reassign_task(index, name):
 
     # Keep removed from new_tasks and suggestions
     st.session_state.new_tasks = st.session_state.new_tasks[
-        st.session_state.new_tasks['TASK_ID'].astype(str) != str(task_id)
+        st.session_state.new_tasks['TASK_ID'].astype(int) != int(task_id)
     ].reset_index(drop=True)
     st.session_state.suggestions.pop(task_id, None)
 
@@ -300,26 +289,27 @@ def run_scheduler(csv_file, model_names):
     if hasattr(csv_file, "seek"):
         csv_file.seek(0)
     df = pd.read_csv(csv_file)
-    df['TASK_ID'] = df['TASK_ID'].astype(str)
+    #df['TASK_ID'] = df['TASK_ID'].astype(str)
 
     try:
-        raw_suggestions = run_prediction_system(
-            df,
-            model_names=[m.lower() for m in model_names],
-            top_k=5
-        )
+        raw_suggestions = run_prediction_pipeline(
+                df_tasks=df,
+                top_k=5,
+                models_to_use=[m.lower() for m in model_names],
+            )
     except Exception as e:
         st.error(f"Error generating suggestions: {e}")
         return {}
 
-    # Keys may come back as "PROJECT_ID TASK_ID" — strip off the PROJECT_ID
-    normalized: dict[str, list] = {}
-    for raw_key, entries in raw_suggestions.items():
-        task_id = raw_key.split()[-1]   # take last token
-        normalized[task_id] = entries
+    predictions_with_scores = convert_to_simple_format(raw_suggestions)
+
+    available_translators = get_available_translators(
+                df,
+                predictions_with_scores
+            )
         
-    print(normalized)
-    return normalized
+    print(available_translators)
+    return available_translators
 
 # -- Tabs setup --
 tab1, tab2, tab3 = st.tabs(["New Tasks", "Assigned Tasks", "Translators"])
@@ -354,7 +344,7 @@ with tab1:
             st.error(f"CSV must include columns: {', '.join(required)}")
         else:
             df_raw['Due'] = pd.to_datetime(df_raw['END'], errors='coerce')
-            df_raw['TASK_ID'] = df_raw['TASK_ID'].astype(str)
+            df_raw['TASK_ID'] = df_raw['TASK_ID'].astype(int)
             st.session_state.raw_tasks = df_raw
             st.session_state.new_tasks = df_raw[['TASK_ID', 'Due']]
 

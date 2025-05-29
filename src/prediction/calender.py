@@ -1,34 +1,167 @@
+def check_calendar_status(translator_calendar, task_start=None, task_deadline=None):
+    """
+    Check if calendar is loaded and has relevant tasks
+    
+    Args:
+        translator_calendar: The loaded calendar dictionary
+        task_start: Optional start datetime to check for relevant conflicts
+        task_deadline: Optional deadline datetime to check for relevant conflicts
+    
+    Returns:
+        dict: {
+            'loaded': bool,
+            'has_tasks': bool,
+            'total_translators': int,
+            'total_assignments': int,
+            'relevant_conflicts': int (if time range provided)
+        }
+    """
+    status = {
+        'loaded': False,
+        'has_tasks': False,
+        'total_translators': 0,
+        'total_assignments': 0
+    }
+    
+    # Check if calendar loaded successfully
+    if not isinstance(translator_calendar, dict):
+        return status
+    
+    status['loaded'] = True
+    status['total_translators'] = len(translator_calendar)
+    
+    # Count total assignments
+    for translator, assignments in translator_calendar.items():
+        if isinstance(assignments, list):
+            status['total_assignments'] += len(assignments)
+    
+    status['has_tasks'] = status['total_assignments'] > 0
+    
+    # Check for relevant conflicts if time range provided
+    if task_start and task_deadline and status['has_tasks']:
+        relevant_conflicts = 0
+        for translator, assignments in translator_calendar.items():
+            for assignment in assignments:
+                if len(assignment) >= 3:
+                    _, start_time, end_time = assignment[0], assignment[1], assignment[2]
+                    
+                    # Convert strings to datetime if needed
+                    if isinstance(start_time, str):
+                        start_time = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
+                    if isinstance(end_time, str):
+                        end_time = datetime.fromisoformat(end_time.replace('Z', '+00:00'))
+                    
+                    # Check if assignment overlaps with our time range
+                    if not (end_time <= task_start or start_time >= task_deadline):
+                        relevant_conflicts += 1
+        
+        status['relevant_conflicts'] = relevant_conflicts
+    
+    return status
+
 import pandas as pd
 from datetime import datetime, timedelta
 import json
 import os
 from typing import Dict, List, Tuple, Optional
+from pathlib import Path
 
-def load_translator_calendar(path='translator_calendar.json'):
+def load_translator_calendar(path=None):
     """Load translator calendar from JSON file"""
     if os.path.exists(path):
-        with open(path, 'r') as f:
-            calendar = json.load(f)
-            return {
-                k: [(entry[0], datetime.fromisoformat(entry[1]), datetime.fromisoformat(entry[2])) for entry in v]
-                for k, v in calendar.items()
-            }
-    return {}
+        try:
+            with open(path, 'r') as f:
+                calendar = json.load(f)
+                
+            # Convert the new format to the expected tuple format
+            converted_calendar = {}
+            for translator, assignments in calendar.items():
+                converted_calendar[translator] = []
+                
+                for i, assignment in enumerate(assignments):
+                    try:
+                        # Handle both dictionary format and tuple format
+                        if isinstance(assignment, dict):
+                            # Dictionary format: {"task_id": ..., "start": ..., "end": ...}
+                            # May also contain additional fields like "alternatives" which we'll ignore
+                            task_id = assignment.get('task_id')
+                            start_time = assignment.get('start')
+                            end_time = assignment.get('end')
+                            
+                            if task_id is not None and start_time and end_time:
+                                start_dt = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
+                                end_dt = datetime.fromisoformat(end_time.replace('Z', '+00:00'))
+                                converted_calendar[translator].append((task_id, start_dt, end_dt))
+                                
+                        elif isinstance(assignment, (tuple, list)) and len(assignment) >= 3:
+                            # Tuple format: (task_id, start_datetime, end_datetime)
+                            task_id, start_time, end_time = assignment[0], assignment[1], assignment[2]
+                            
+                            # Convert datetime strings if needed
+                            if isinstance(start_time, str):
+                                start_time = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
+                            if isinstance(end_time, str):
+                                end_time = datetime.fromisoformat(end_time.replace('Z', '+00:00'))
+                            
+                            converted_calendar[translator].append((task_id, start_time, end_time))
+                            
+                    except Exception as e:
+                        print(f"Error processing assignment {i+1} for {translator}: {e}")
+                        continue
+                
+            return converted_calendar
+        except Exception as e:
+            print(f"Error loading translator calendar: {e}")
+            return {}
+    else:
+        return {}
 
 def load_translator_calendar_from_data(calendar_data):
     """Load translator calendar from provided data (dict or JSON string)"""
-    if isinstance(calendar_data, str):
-        calendar = json.loads(calendar_data)
-    elif isinstance(calendar_data, dict):
-        calendar = calendar_data
-    else:
+    try:
+        if isinstance(calendar_data, str):
+            calendar = json.loads(calendar_data)
+        elif isinstance(calendar_data, dict):
+            calendar = calendar_data
+        else:
+            return {}
+        
+        # Convert the new format to the expected tuple format
+        converted_calendar = {}
+        for translator, assignments in calendar.items():
+            converted_calendar[translator] = []
+            for assignment in assignments:
+                # Handle both dictionary format and tuple format
+                if isinstance(assignment, dict):
+                    # Dictionary format: {"task_id": ..., "start": ..., "end": ...}
+                    # May also contain additional fields like "alternatives" which we'll ignore
+                    task_id = assignment.get('task_id')
+                    start_time = assignment.get('start')
+                    end_time = assignment.get('end')
+                    
+                    if task_id is not None and start_time and end_time:
+                        converted_calendar[translator].append(
+                            (task_id, 
+                             datetime.fromisoformat(start_time.replace('Z', '+00:00')), 
+                             datetime.fromisoformat(end_time.replace('Z', '+00:00')))
+                        )
+                elif isinstance(assignment, (tuple, list)) and len(assignment) >= 3:
+                    # Tuple format: (task_id, start_datetime, end_datetime)
+                    task_id, start_time, end_time = assignment[0], assignment[1], assignment[2]
+                    
+                    # Convert datetime strings if needed
+                    if isinstance(start_time, str):
+                        start_time = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
+                    if isinstance(end_time, str):
+                        end_time = datetime.fromisoformat(end_time.replace('Z', '+00:00'))
+                    
+                    converted_calendar[translator].append((task_id, start_time, end_time))
+        
+        return converted_calendar
+    except Exception as e:
+        print(f"Error loading translator calendar from data: {e}")
         return {}
     
-    return {
-        k: [(entry[0], datetime.fromisoformat(entry[1]), datetime.fromisoformat(entry[2])) for entry in v]
-        for k, v in calendar.items()
-    }
-
 def save_assignments_to_csv(assignments, path='final_assignments.csv'):
     """Save final assignments to CSV file"""
     df = pd.DataFrame(assignments)
@@ -46,7 +179,7 @@ def export_translator_calendar(translator_calendar):
         for k, v in translator_calendar.items()
     }
 
-def load_translator_schedules(schedules_path='data/interim/schedules.csv') -> Dict[str, Dict]:
+def load_translator_schedules(schedules_path=Path(__file__).absolute().parent.parent.parent / "data" / "interim" / "schedules.csv") -> Dict[str, Dict]:
     """Load translator weekly schedules from CSV file"""
     try:
         schedules_df = pd.read_csv(schedules_path)
@@ -72,109 +205,63 @@ def load_translator_schedules(schedules_path='data/interim/schedules.csv') -> Di
         return {}
 
 def is_translator_available(task_row, translator_calendar, translator_schedules=None, modify_calendar=True):
-    """Check if translator is available for the given task
-    
-    Args:
-        task_row: Task information
-        translator_calendar: Current translator calendar (will be modified if modify_calendar=True)
-        translator_schedules: Weekly schedules for translators
-        modify_calendar: If True, adds assignment to calendar; if False, only checks availability
-    
-    Returns:
-        bool: True if translator is available and task can be scheduled
-    """
+    """Check if translator is available for the given task with debug messages"""
+    from datetime import datetime, time, timedelta
+
     # Extract task information
-    if isinstance(task_row, dict):
-        task_start = task_row['start']
-        task_deadline = task_row['deadline'] 
-        duration = task_row['forecast']
-        translator = task_row['translator']
-    else:
-        # Assume it's a pandas Series
-        task_start = task_row['start']
-        task_deadline = task_row['deadline']
-        duration = task_row['forecast']
-        translator = task_row['translator']
-    
+    task_start = task_row['start']
+    task_deadline = task_row['deadline']
+    duration = task_row['forecast']
+    translator = task_row['translator']
+    task_id = task_row.get('task_id', 'unknown')
+
     # Convert strings to datetime if needed
     if isinstance(task_start, str):
         task_start = datetime.fromisoformat(task_start.replace('Z', '+00:00'))
     if isinstance(task_deadline, str):
         task_deadline = datetime.fromisoformat(task_deadline.replace('Z', '+00:00'))
-    
-    # Get translator's weekly schedule
+
+    # ——— DEBUG: translator schedule lookup ———
     if translator_schedules and translator in translator_schedules:
         schedule = translator_schedules[translator]
-        
-        # Handle different time formats (HH:MM or HH:MM:SS)
         work_start_str = schedule['work_start']
         work_end_str = schedule['work_end']
-        
-        # Parse time strings - handle both HH:MM and HH:MM:SS formats
         try:
-            if len(work_start_str.split(':')) == 3:  # HH:MM:SS format
+            if len(work_start_str.split(':')) == 3:
                 work_start = datetime.strptime(work_start_str, "%H:%M:%S").time()
                 work_end = datetime.strptime(work_end_str, "%H:%M:%S").time()
-            else:  # HH:MM format
+            else:
                 work_start = datetime.strptime(work_start_str, "%H:%M").time()
                 work_end = datetime.strptime(work_end_str, "%H:%M").time()
-        except ValueError as e:
-            print(f"Warning: Error parsing time for translator {translator}: {e}")
-            print(f"  work_start: '{work_start_str}', work_end: '{work_end_str}'")
-            # Use default times if parsing fails
-            work_start = datetime.strptime("09:00", "%H:%M").time()
-            work_end = datetime.strptime("17:00", "%H:%M").time()
-        
-        weekday_avail = {
-            0: schedule['mon'], 1: schedule['tue'], 2: schedule['wed'],
-            3: schedule['thu'], 4: schedule['fri'], 5: schedule['sat'], 6: schedule['sun']
-        }
+        except Exception as e:
+            work_start = time(9, 0)
+            work_end = time(17, 0)
+        weekday_avail = {i: schedule.get(day, False) for i, day in enumerate(['mon','tue','wed','thu','fri','sat','sun'])}
     else:
-        # Fallback to task_row data if available
-        try:
-            work_start_str = task_row['work_start']
-            work_end_str = task_row['work_end']
-            
-            # Handle different time formats
-            if len(work_start_str.split(':')) == 3:  # HH:MM:SS format
-                work_start = datetime.strptime(work_start_str, "%H:%M:%S").time()
-                work_end = datetime.strptime(work_end_str, "%H:%M:%S").time()
-            else:  # HH:MM format
-                work_start = datetime.strptime(work_start_str, "%H:%M").time()
-                work_end = datetime.strptime(work_end_str, "%H:%M").time()
-                
-            weekday_avail = {
-                0: task_row['mon'], 1: task_row['tue'], 2: task_row['wed'],
-                3: task_row['thu'], 4: task_row['fri'], 5: task_row['sat'], 6: task_row['sun']
-            }
-        except (KeyError, TypeError, ValueError) as e:
-            print(f"Warning: No schedule data found for translator {translator}: {e}")
-            return False
+        work_start = time(9, 0)
+        work_end = time(17, 0)
+        weekday_avail = {i: (i < 5) for i in range(7)}  # Mon-Fri
 
     # Initialize translator calendar if not exists
     if translator not in translator_calendar:
         translator_calendar[translator] = []
-    
-    # Get current scheduled tasks (read-only copy for checking)
     scheduled = translator_calendar[translator].copy()
-    
-    # Track new assignments to add (only if modify_calendar=True)
     new_assignments = []
 
     current_time = task_start
     hours_remaining = duration
 
-    while current_time <= task_deadline and hours_remaining > 0:
-        # Check if translator is available on this weekday
-        if weekday_avail.get(current_time.weekday(), 0):
-            start_dt = datetime.combine(current_time.date(), work_start)
-            end_dt = datetime.combine(current_time.date(), work_end)
+    while current_time.date() <= task_deadline.date() and hours_remaining > 0:
+        current_date = current_time.date()
+        weekday = current_time.weekday()
+        if weekday_avail.get(weekday, False):
+            start_dt = datetime.combine(current_date, work_start)
+            end_dt = datetime.combine(current_date, work_end)
 
-            # Get busy periods for this day (from existing schedule + potential new assignments)
-            busy = [(s, e) for (_, s, e) in scheduled if s.date() == current_time.date()]
+            busy = [(s, e) for (_, s, e) in scheduled if s.date() == current_date]
             busy.sort()
 
-            # Find free slots
+            # find free slots
             free_slots = []
             last_end = start_dt
             for b_start, b_end in busy:
@@ -184,39 +271,29 @@ def is_translator_available(task_row, translator_calendar, translator_schedules=
             if last_end < end_dt:
                 free_slots.append((last_end, end_dt))
 
-            # Try to assign work in free slots
             for slot_start, slot_end in free_slots:
                 free_hours = (slot_end - slot_start).total_seconds() / 3600
                 if free_hours <= 0:
                     continue
-                    
                 hours_to_assign = min(hours_remaining, free_hours)
                 assignment_end = slot_start + timedelta(hours=hours_to_assign)
-                
-                # Create the assignment
-                new_assignment = (task_row.get('task_id', 'unknown'), slot_start, assignment_end)
-                new_assignments.append(new_assignment)
-                
-                # Add to scheduled list for further availability checking in this loop
-                scheduled.append(new_assignment)
-                
+                new_assignments.append((task_id, slot_start, assignment_end))
+                scheduled.append((task_id, slot_start, assignment_end))
                 hours_remaining -= hours_to_assign
                 if hours_remaining <= 0:
                     break
-        
+
         current_time += timedelta(days=1)
 
-    # Check if task was fully scheduled
+    # Outcome
     if hours_remaining <= 0:
-        # Only modify the calendar if requested
         if modify_calendar:
             translator_calendar[translator].extend(new_assignments)
         return True
     else:
-        # Task couldn't be completed - don't add any assignments
         return False
 
-def assign_tasks_from_model_output(task_rankings, existing_calendar_data=None, translator_schedules=None):
+def assign_tasks_from_model_output(task_rankings, existing_calendar_data=Path(__file__).absolute().parent.parent.parent / "src" / "prediction" / "translator_schedule.json", translator_schedules=None):
     """Assign tasks to translators based on model rankings and availability
     
     Args:
@@ -243,11 +320,13 @@ def assign_tasks_from_model_output(task_rankings, existing_calendar_data=None, t
         translator_calendar = {}
     
     assignments = []
+    successful_assignments = 0
+    failed_assignments = 0
     
     for task_id, task_df in task_rankings.items():
         task_assigned = False
         
-        for _, row in task_df.iterrows():
+        for rank, (_, row) in enumerate(task_df.iterrows(), 1):
             # Create enhanced row with task_id for tracking
             enhanced_row = row.copy() if hasattr(row, 'copy') else dict(row)
             if isinstance(enhanced_row, dict):
@@ -269,35 +348,46 @@ def assign_tasks_from_model_output(task_rankings, existing_calendar_data=None, t
                 }
                 assignments.append(assignment)
                 task_assigned = True
+                successful_assignments += 1
                 break  # Stop after assigning to one available translator
         
         if not task_assigned:
+            failed_assignments += 1
             print(f"Warning: Could not assign task {task_id} to any available translator")
     
     return assignments, translator_calendar
 
-def check_translator_availability_only(task_row, existing_calendar_data=None, translator_schedules=None):
-    """Check if translator is available without modifying calendar
-    
-    Args:
-        task_row: Task information
-        existing_calendar_data: Existing translator assignments
-        translator_schedules: Weekly schedules for translators
-    
-    Returns:
-        bool: True if translator is available
+def check_translator_availability_only(
+    task_row,
+    existing_calendar_data=Path(__file__).absolute().parent.parent.parent / "src" / "prediction" / "translator_schedule.json",
+    translator_schedules=None
+):
+    """
+    Check if translator is available without modifying calendar, using debug prints
     """
     # Load existing calendar
     if existing_calendar_data is None:
         translator_calendar = {}
-    elif isinstance(existing_calendar_data, str):
-        if os.path.exists(existing_calendar_data):
-            translator_calendar = load_translator_calendar(existing_calendar_data)
-        else:
-            translator_calendar = load_translator_calendar_from_data(existing_calendar_data)
-    elif isinstance(existing_calendar_data, dict):
+    elif isinstance(existing_calendar_data, str) and os.path.exists(existing_calendar_data):
+        translator_calendar = load_translator_calendar(existing_calendar_data)
+    elif isinstance(existing_calendar_data, (str, dict)):
         translator_calendar = load_translator_calendar_from_data(existing_calendar_data)
     else:
         translator_calendar = {}
-    
-    return is_translator_available(task_row, translator_calendar, translator_schedules, modify_calendar=False)
+
+    # Load schedules if not provided
+    if translator_schedules is None:
+        try:
+            translator_schedules = load_translator_schedules()
+        except Exception:
+            translator_schedules = None
+
+    # Always call the debug-enabled availability checker
+    available = is_translator_available(
+        task_row,
+        translator_calendar,
+        translator_schedules,
+        modify_calendar=False
+    )
+    print(f"[DEBUG] Availability for {task_row['translator']}: {available}")
+    return available
