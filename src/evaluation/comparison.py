@@ -147,9 +147,10 @@ def compare_with_random_baseline(
         else:
             metrics_random[f'ndcg@{k}'] = 0.0
 
-    print("\nPerformance comparison (NDCG@k):")
+    print()
+    print("Performance comparison (NDCG@k):")
     print(f"{'k':<5} {'Model':<10} {'Random':<10} {'Improvement':<15}")
-    print("-" * 40)
+    print()
     for k in k_values:
         model_ndcg = metrics_model[f'ndcg@{k}']
         random_ndcg = metrics_random[f'ndcg@{k}']
@@ -171,15 +172,13 @@ def compare_with_random_baseline(
         [i - width/2 for i in x],
         [metrics_model[f'ndcg@{k}'] for k in k_values],
         width,
-        label='Model',
-        color='skyblue'
+        label='Model'
     )
     random_bars = plt.bar(
         [i + width/2 for i in x],
         [metrics_random[f'ndcg@{k}'] for k in k_values],
         width,
-        label='Random',
-        color='lightcoral'
+        label='Random'
     )
 
     # Add labels and title

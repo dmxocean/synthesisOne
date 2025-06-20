@@ -1,0 +1,307 @@
+{
+  "Ascension": [
+    {
+      "task_id": 11230500,
+      "start": "2025-05-20T09:00:00",
+      "end": "2025-05-20T12:30:00",
+      "alternatives": [
+        {
+          "translator": "Ana Marcela",
+          "raw_score": 0.5608606341843072,
+          "norm_score": 5.5
+        },
+        {
+          "translator": "Miqueas Alfredo",
+          "raw_score": 0.26594375520571834,
+          "norm_score": 2.5
+        },
+        {
+          "translator": "Timoteo",
+          "raw_score": 0.26594375520571834,
+          "norm_score": 2.5
+        },
+        {
+          "translator": "Narciso Felipe",
+          "raw_score": 0.0,
+          "norm_score": 0.0
+        }
+      ]
+    }
+  ],
+  "Usula": [
+    {
+      "task_id": 11230500,
+      "start": "2025-05-20T09:00:00",
+      "end": "2025-05-20T12:30:00",
+      "alternatives": [
+        {
+          "translator": "Alejandro",
+          "raw_score": 2.575930168707177,
+          "norm_score": 10.0
+        },
+        {
+          "translator": "Columbano Cleofas",
+          "raw_score": 2.281538373848824,
+          "norm_score": 9.0
+        },
+        {
+          "translator": "Roberto",
+          "raw_score": 1.902700788086245,
+          "norm_score": 7.5
+        },
+        {
+          "translator": "Aline",
+          "raw_score": 1.7169704515639752,
+          "norm_score": 6.5
+        }
+      ]
+    }
+  ],
+  "Chantal": [
+    {
+      "task_id": 11230501,
+      "start": "2025-05-20T14:00:00",
+      "end": "2025-05-20T16:00:00",
+      "alternatives": [
+        {
+          "translator": "Alice",
+          "raw_score": -3.650733910022968,
+          "norm_score": 14.5
+        }
+      ]
+    }
+  ],
+  "Victor": [
+    {
+      "task_id": 11230502,
+      "start": "2025-05-21T10:00:00",
+      "end": "2025-05-21T15:00:00",
+      "alternatives": [
+        {
+          "translator": "Paul",
+          "raw_score": -0.10466796754211358,
+          "norm_score": -1.0
+        },
+        {
+          "translator": "Abigail",
+          "raw_score": -0.1865625605981466,
+          "norm_score": -1.5
+        },
+        {
+          "translator": "Martina",
+          "raw_score": -0.3684720709075542,
+          "norm_score": -3.0
+        },
+        {
+          "translator": "Markus",
+          "raw_score": -0.44060033064519,
+          "norm_score": -3.5
+        }
+      ]
+    }
+  ],
+  "Sophie": [
+    {
+      "task_id": 11230503,
+      "start": "2025-05-21T13:00:00",
+      "end": "2025-05-21T14:30:00",
+      "alternatives": [
+        {
+          "translator": "Ariadna Laurina",
+          "raw_score": -0.00877691950586093,
+          "norm_score": -0.5
+        },
+        {
+          "translator": "Luis Felipe",
+          "raw_score": -0.332649195887631,
+          "norm_score": -27.5
+        },
+        {
+          "translator": "Connor",
+          "raw_score": -0.33325779569922903,
+          "norm_score": -27.5
+        },
+        {
+          "translator": "Maximo",
+          "raw_score": -0.397896551355498,
+          "norm_score": -33.0
+        }
+      ]
+    }
+  ],
+  "Almudena Fiamma": [
+    {
+      "task_id": 11230504,
+      "start": "2025-05-22T08:00:00",
+      "end": "2025-05-22T12:00:00",
+      "alternatives": [
+        {
+          "translator": "Xoana",
+          "raw_score": 2.971095531189376,
+          "norm_score": 10.0
+        },
+        {
+          "translator": "Abelardo",
+          "raw_score": 1.9059368228313143,
+          "norm_score": 6.5
+        },
+        {
+          "translator": "Abdon Isaias",
+          "raw_score": 1.7549614450228839,
+          "norm_score": 6.0
+        },
+        {
+          "translator": "Carles",
+          "raw_score": 1.7420222359019113,
+          "norm_score": 6.0
+        }
+      ]
+    }
+  ],
+  "Luc": [
+    {
+      "task_id": 11230505,
+      "start": "2025-05-22T09:00:00",
+      "end": "2025-05-22T11:30:00",
+      "alternatives": [
+        {
+          "translator": "Kingsley",
+          "raw_score": -0.021091727582493565,
+          "norm_score": -0.5
+        },
+        {
+          "translator": "Emil",
+          "raw_score": -0.048623147463616984,
+          "norm_score": -1.5
+        },
+        {
+          "translator": "Chantal",
+          "raw_score": -0.2757582601732432,
+          "norm_score": -7.5
+        },
+        {
+          "translator": "Adele",
+          "raw_score": -0.4127358613390574,
+          "norm_score": -11.0
+        }
+      ]
+    }
+  ],
+  "Aino": [
+    {
+      "task_id": 11230506,
+      "start": "2025-05-23T10:00:00",
+      "end": "2025-05-23T13:00:00",
+      "alternatives": []
+    }
+  ],
+  "Alejandro": [
+    {
+      "task_id": 11230500,
+      "start": "2025-05-20T09:00:00",
+      "end": "2025-05-20T12:30:00",
+      "alternatives": []
+    }
+  ],
+  "Alice": [
+    {
+      "task_id": 11230501,
+      "start": "2025-05-20T14:00:00",
+      "end": "2025-05-20T16:00:00",
+      "alternatives": []
+    }
+  ],
+  "Martina": [
+    {
+      "task_id": 11230502,
+      "start": "2025-05-21T10:00:00",
+      "end": "2025-05-21T15:00:00",
+      "alternatives": [
+        {
+          "translator": "Victor",
+          "raw_score": 1.2351080021472125,
+          "norm_score": 10.0
+        },
+        {
+          "translator": "Paul",
+          "raw_score": -0.10466796754211358,
+          "norm_score": -1.0
+        },
+        {
+          "translator": "Abigail",
+          "raw_score": -0.1865625605981466,
+          "norm_score": -1.5
+        },
+        {
+          "translator": "Markus",
+          "raw_score": -0.44060033064519,
+          "norm_score": -3.5
+        }
+      ]
+    }
+  ],
+  "Julen": [
+    {
+      "task_id": 12000000,
+      "start": "2024-06-01T09:00:00",
+      "end": "2024-06-01T13:54:00",
+      "alternatives": []
+    }
+  ],
+  "Otilia Rebeca": [
+    {
+      "task_id": 12000001,
+      "start": "2024-06-02T13:00:00",
+      "end": "2024-06-02T17:54:00",
+      "alternatives": []
+    }
+  ],
+  "Johanna": [
+    {
+      "task_id": 12000002,
+      "start": "2024-06-03T10:00:00",
+      "end": "2024-06-03T16:18:00",
+      "alternatives": [
+        {
+          "translator": "Amelie",
+          "raw_score": 0.5297307086757049,
+          "norm_score": 5.5
+        },
+        {
+          "translator": "Baptiste",
+          "raw_score": 0.29456610230767877,
+          "norm_score": 3.0
+        },
+        {
+          "translator": "Alexandre",
+          "raw_score": 0.0,
+          "norm_score": 0.0
+        }
+      ]
+    }
+  ],
+  "Baptiste": [
+    {
+      "task_id": 12000002,
+      "start": "2024-06-03T10:00:00",
+      "end": "2024-06-03T16:18:00",
+      "alternatives": [
+        {
+          "translator": "Johanna",
+          "raw_score": 1.0,
+          "norm_score": 10.0
+        },
+        {
+          "translator": "Amelie",
+          "raw_score": 0.5297307086757049,
+          "norm_score": 5.5
+        },
+        {
+          "translator": "Alexandre",
+          "raw_score": 0.0,
+          "norm_score": 0.0
+        }
+      ]
+    }
+  ]
+}

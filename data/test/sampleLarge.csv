@@ -1,0 +1,101 @@
+PROJECT_ID,PM,TASK_ID,START,END,TASK_TYPE,SOURCE_LANG,TARGET_LANG,FORECAST,COST,MANUFACTURER,MANUFACTURER_SECTOR,WILDCARD
+220000,RMT,12000000,2024-06-01 14:00:00,2024-06-04 13:00:00,Translation,Catalan,French,3.9,146.0,Industrial Innovations,Industrials,Quality
+220000,JDM,12000001,2024-06-02 16:00:00,2024-06-05 13:00:00,Post-Editing,Basque,Basque,7.5,296.0,ProdigySoft,Information Technology,Deadline
+220000,JDM,12000002,2024-06-03 12:00:00,2024-06-05 08:00:00,Editing,Catalan,English (US),5.4,174.1,FluidMaster,Information Technology,Quality
+220000,BMT,12000003,2024-06-04 13:00:00,2024-06-06 22:00:00,Post-Editing,Arabic,Spanish (Iberian),2.8,98.4,HealthEquip,Health Care,Quality
+220000,SAB,12000004,2024-06-05 13:00:00,2024-06-07 11:00:00,QA,Catalan,English (UK),3.3,98.0,OptiMold Industries,Information Technology,Quality
+220001,KMT,12000005,2024-06-06 15:00:00,2024-06-09 09:00:00,Editing,Basque,English,6.6,111.8,ControlSoft,Information Technology,Quality
+220001,KMT,12000006,2024-06-07 10:00:00,2024-06-08 12:00:00,Proofreading,Basque,Basque,7.2,311.5,GlobalTech Solutions,Information Technology,Deadline
+220001,PMT,12000007,2024-06-08 11:00:00,2024-06-11 05:00:00,Review,Basque,Basque,1.6,36.1,SoftEcology,Information Technology,Quality
+220001,RPN,12000008,2024-06-09 12:00:00,2024-06-12 03:00:00,Post-Editing,Catalan,Italian,4.5,219.7,ControlSoft,Information Technology,Quality
+220001,RMT,12000009,2024-06-10 10:00:00,2024-06-11 14:00:00,Proofreading,Basque,English,6.0,115.1,Axion Automotive Solutions,Consumer Discretionary,Deadline
+220002,RMT,12000010,2024-06-11 15:00:00,2024-06-12 16:00:00,Proofreading,Basque,English,6.5,252.4,OptiMold Industries,Information Technology,Quality
+220002,RPN,12000011,2024-06-12 10:00:00,2024-06-14 11:00:00,Post-Editing,Basque,Basque,1.1,20.7,CleanMed Industries,Information Technology,Deadline
+220002,RMT,12000012,2024-06-13 11:00:00,2024-06-15 20:00:00,Translation,Catalan,English,1.0,48.8,Novus Group,Information Technology,Deadline
+220002,RMT,12000013,2024-06-14 09:00:00,2024-06-15 16:00:00,Translation,Arabic,Spanish (Iberian),6.6,289.4,Meridian Industrial,Industrials,Quality
+220002,SAB,12000014,2024-06-15 09:00:00,2024-06-17 08:00:00,Translation,Basque,Spanish (Global),1.1,32.5,ControlSoft,Information Technology,Quality
+220003,RPN,12000015,2024-06-16 14:00:00,2024-06-18 23:00:00,Translation,Basque,Spanish (Iberian),1.5,67.2,FluidMaster,Information Technology,Quality
+220003,KMT,12000016,2024-06-17 13:00:00,2024-06-18 18:00:00,Editing,Basque,Basque,6.1,128.1,ProdigySoft,Information Technology,Deadline
+220003,KMT,12000017,2024-06-18 14:00:00,2024-06-21 09:00:00,Editing,Catalan,Russian,6.0,206.9,HealthEquip,Health Care,Quality
+220003,PMT,12000018,2024-06-19 11:00:00,2024-06-21 10:00:00,QA,Catalan,Galician,4.0,81.4,CleanMed Industries,Information Technology,Deadline
+220003,RPN,12000019,2024-06-20 13:00:00,2024-06-21 13:00:00,Proofreading,Catalan,Russian,2.1,76.6,Industrial Innovations,Industrials,Quality
+220004,KMT,12000020,2024-06-21 12:00:00,2024-06-23 20:00:00,QA,Basque,English,6.3,284.6,FlexTronics Innovations,Information Technology,Deadline
+220004,PMT,12000021,2024-06-22 15:00:00,2024-06-24 01:00:00,QA,Basque,English,1.3,32.6,Cyclonic Manufacturing,Industrials,Price
+220004,KMT,12000022,2024-06-23 14:00:00,2024-06-25 23:00:00,QA,Catalan,German,2.9,112.8,Solartek Industrial,Industrials,Price
+220004,RPN,12000023,2024-06-24 13:00:00,2024-06-25 21:00:00,Editing,Basque,Spanish (Global),7.6,181.4,SoftEcology,Information Technology,Quality
+220004,SAB,12000024,2024-06-25 13:00:00,2024-06-28 11:00:00,Editing,Arabic,Spanish (Iberian),3.7,139.9,Cyclonic Manufacturing,Industrials,Price
+220005,RPN,12000025,2024-06-26 09:00:00,2024-06-27 23:00:00,Proofreading,Arabic,Spanish (Iberian),1.4,42.1,CleanMed Industries,Information Technology,Deadline
+220005,KMT,12000026,2024-06-27 16:00:00,2024-06-28 20:00:00,Post-Editing,Catalan,English (US),7.7,190.1,echWorks Inc.,Information Technology,Price
+220005,KMT,12000027,2024-06-28 11:00:00,2024-07-01 06:00:00,Editing,Catalan,German,5.0,143.9,Cyclonic Manufacturing,Industrials,Price
+220005,JDM,12000028,2024-06-29 09:00:00,2024-06-30 13:00:00,Translation,Basque,Spanish (Global),7.1,205.4,ControlSoft,Information Technology,Quality
+220005,RPN,12000029,2024-06-30 14:00:00,2024-07-03 11:00:00,Editing,Catalan,English (UK),7.8,290.8,Meridian Industrial,Industrials,Quality
+220006,SAB,12000030,2024-07-01 14:00:00,2024-07-04 00:00:00,Translation,Catalan,Spanish (Global),6.7,201.6,Cyclonic Manufacturing,Industrials,Price
+220006,SAB,12000031,2024-07-02 10:00:00,2024-07-04 11:00:00,Proofreading,Catalan,English (UK),2.7,92.2,FluidMaster,Information Technology,Quality
+220006,JDM,12000032,2024-07-03 16:00:00,2024-07-05 16:00:00,Post-Editing,Basque,Spanish (Iberian),4.1,189.9,Vantage Works,Information Technology,Price
+220006,RPN,12000033,2024-07-04 13:00:00,2024-07-07 11:00:00,Translation,Catalan,English (US),2.6,93.1,Cyclonic Manufacturing,Industrials,Price
+220006,JDM,12000034,2024-07-05 10:00:00,2024-07-07 02:00:00,Editing,Catalan,German,4.5,216.3,SoftEcology,Information Technology,Quality
+220007,SAB,12000035,2024-07-06 12:00:00,2024-07-08 17:00:00,Proofreading,Catalan,English (UK),3.5,115.1,SoftEcology,Information Technology,Quality
+220007,JDM,12000036,2024-07-07 09:00:00,2024-07-08 19:00:00,Proofreading,Catalan,English (US),4.0,150.6,Vulcan High Council,Information Technology,Deadline
+220007,JDM,12000037,2024-07-08 12:00:00,2024-07-11 03:00:00,Editing,Basque,English,3.4,97.0,Radiant Ventures,Information Technology,Price
+220007,PMT,12000038,2024-07-09 14:00:00,2024-07-11 22:00:00,Post-Editing,Catalan,Russian,6.6,102.4,Meridian Industrial,Industrials,Quality
+220007,SAB,12000039,2024-07-10 12:00:00,2024-07-11 21:00:00,Proofreading,Basque,Spanish (Iberian),4.6,114.0,echWorks Inc.,Information Technology,Price
+220008,KMT,12000040,2024-07-11 13:00:00,2024-07-14 12:00:00,QA,Catalan,English (US),1.4,62.6,OptiMold Industries,Information Technology,Quality
+220008,BMT,12000041,2024-07-12 15:00:00,2024-07-14 15:00:00,Proofreading,Basque,Spanish (Global),6.1,124.9,Radiant Ventures,Information Technology,Price
+220008,RPN,12000042,2024-07-13 11:00:00,2024-07-15 22:00:00,Proofreading,Arabic,Spanish (Iberian),5.6,146.7,echWorks Inc.,Information Technology,Price
+220008,RMT,12000043,2024-07-14 15:00:00,2024-07-17 12:00:00,Proofreading,Arabic,Spanish (Iberian),3.1,53.7,CleanMed Industries,Information Technology,Deadline
+220008,PMT,12000044,2024-07-15 13:00:00,2024-07-17 10:00:00,Translation,Catalan,English (UK),6.4,215.0,HealthEquip,Health Care,Quality
+220009,KMT,12000045,2024-07-16 09:00:00,2024-07-18 22:00:00,QA,Catalan,Russian,4.8,133.0,ProdigySoft,Information Technology,Deadline
+220009,PMT,12000046,2024-07-17 09:00:00,2024-07-18 18:00:00,Post-Editing,Catalan,English (UK),4.7,130.7,Vulcan High Council,Information Technology,Deadline
+220009,KMT,12000047,2024-07-18 15:00:00,2024-07-19 19:00:00,Proofreading,Arabic,Spanish (Iberian),5.4,242.6,OptiMold Industries,Information Technology,Quality
+220009,KMT,12000048,2024-07-19 13:00:00,2024-07-21 09:00:00,Translation,Basque,Spanish (Iberian),5.8,248.0,Radiant Ventures,Information Technology,Price
+220009,SAB,12000049,2024-07-20 14:00:00,2024-07-23 05:00:00,Post-Editing,Catalan,Catalan,6.9,269.7,GlobalTech Solutions,Information Technology,Deadline
+220010,BMT,12000050,2024-07-21 11:00:00,2024-07-22 22:00:00,Post-Editing,Catalan,French,6.2,133.4,FlexTronics Innovations,Information Technology,Deadline
+220010,KMT,12000051,2024-07-22 13:00:00,2024-07-24 08:00:00,Review,Catalan,Italian,2.1,77.2,Vulcan High Council,Information Technology,Deadline
+220010,BMT,12000052,2024-07-23 09:00:00,2024-07-25 11:00:00,Review,Catalan,English (US),5.7,144.2,HealthEquip,Health Care,Quality
+220010,JDM,12000053,2024-07-24 12:00:00,2024-07-26 02:00:00,Post-Editing,Catalan,Spanish (Global),6.1,143.5,OptiMold Industries,Information Technology,Quality
+220010,RPN,12000054,2024-07-25 14:00:00,2024-07-28 09:00:00,Post-Editing,Catalan,German,6.4,292.1,echWorks Inc.,Information Technology,Price
+220011,RPN,12000055,2024-07-26 12:00:00,2024-07-27 21:00:00,Post-Editing,Catalan,Catalan,2.7,51.1,Meridian Industrial,Industrials,Quality
+220011,PMT,12000056,2024-07-27 10:00:00,2024-07-28 16:00:00,QA,Catalan,Spanish (Global),1.9,54.1,ProdigySoft,Information Technology,Deadline
+220011,BMT,12000057,2024-07-28 11:00:00,2024-07-29 18:00:00,Review,Basque,Spanish (Iberian),8.0,291.4,OptiMold Industries,Information Technology,Quality
+220011,BMT,12000058,2024-07-29 12:00:00,2024-07-31 13:00:00,QA,Basque,Spanish (Iberian),2.9,72.3,Radiant Ventures,Information Technology,Price
+220011,RPN,12000059,2024-07-30 10:00:00,2024-08-01 19:00:00,Editing,Catalan,English (UK),7.6,325.4,echWorks Inc.,Information Technology,Price
+220012,PMT,12000060,2024-07-31 14:00:00,2024-08-02 20:00:00,Editing,Catalan,Italian,2.7,99.2,GlobalTech Solutions,Information Technology,Deadline
+220012,PMT,12000061,2024-08-01 16:00:00,2024-08-04 04:00:00,Proofreading,Catalan,Russian,7.0,333.4,HealthEquip,Health Care,Quality
+220012,RMT,12000062,2024-08-02 11:00:00,2024-08-05 04:00:00,Translation,Catalan,Russian,2.8,122.8,ControlSoft,Information Technology,Quality
+220012,SAB,12000063,2024-08-03 15:00:00,2024-08-04 20:00:00,Translation,Catalan,English (UK),2.3,70.9,BioFabrica,Health Care,Quality
+220012,JDM,12000064,2024-08-04 16:00:00,2024-08-07 14:00:00,Editing,Catalan,English,4.3,188.3,ControlSoft,Information Technology,Quality
+220013,BMT,12000065,2024-08-05 13:00:00,2024-08-06 18:00:00,QA,Basque,Spanish (Iberian),7.2,337.8,BioFabrica,Health Care,Quality
+220013,RPN,12000066,2024-08-06 15:00:00,2024-08-07 22:00:00,Editing,Catalan,English (US),7.1,285.3,HealthEquip,Health Care,Quality
+220013,PMT,12000067,2024-08-07 14:00:00,2024-08-10 10:00:00,Review,Catalan,English (US),7.8,124.1,Cyclonic Manufacturing,Industrials,Price
+220013,JDM,12000068,2024-08-08 15:00:00,2024-08-11 10:00:00,Editing,Catalan,Russian,6.2,298.7,ProdigySoft,Information Technology,Deadline
+220013,RMT,12000069,2024-08-09 13:00:00,2024-08-11 21:00:00,Post-Editing,Catalan,English (UK),3.1,113.7,FlexTronics Innovations,Information Technology,Deadline
+220014,PMT,12000070,2024-08-10 12:00:00,2024-08-12 07:00:00,Proofreading,Catalan,French,5.9,162.2,SoftEcology,Information Technology,Quality
+220014,JDM,12000071,2024-08-11 14:00:00,2024-08-13 02:00:00,QA,Catalan,French,7.9,282.8,Axion Automotive Solutions,Consumer Discretionary,Deadline
+220014,RPN,12000072,2024-08-12 16:00:00,2024-08-13 22:00:00,QA,Catalan,Russian,1.6,36.2,Axion Automotive Solutions,Consumer Discretionary,Deadline
+220014,RPN,12000073,2024-08-13 11:00:00,2024-08-15 09:00:00,Translation,Catalan,Galician,4.4,200.8,Meridian Industrial,Industrials,Quality
+220014,PMT,12000074,2024-08-14 12:00:00,2024-08-16 16:00:00,QA,Catalan,Italian,6.8,183.0,GlobalTech Solutions,Information Technology,Deadline
+220015,RPN,12000075,2024-08-15 14:00:00,2024-08-18 12:00:00,Editing,Catalan,Catalan,6.6,249.4,Radiant Ventures,Information Technology,Price
+220015,PMT,12000076,2024-08-16 14:00:00,2024-08-17 22:00:00,Review,Basque,Basque,2.8,81.6,FlexTronics Innovations,Information Technology,Deadline
+220015,RPN,12000077,2024-08-17 10:00:00,2024-08-20 06:00:00,Review,Basque,Spanish (Iberian),6.7,117.0,Vulcan High Council,Information Technology,Deadline
+220015,JDM,12000078,2024-08-18 13:00:00,2024-08-20 16:00:00,Post-Editing,Catalan,Galician,6.3,107.6,Axion Automotive Solutions,Consumer Discretionary,Deadline
+220015,PMT,12000079,2024-08-19 14:00:00,2024-08-21 03:00:00,Review,Catalan,Russian,3.8,169.1,BioFabrica,Health Care,Quality
+220016,BMT,12000080,2024-08-20 11:00:00,2024-08-23 01:00:00,Review,Basque,Spanish (Global),5.7,202.6,Radiant Ventures,Information Technology,Price
+220016,BMT,12000081,2024-08-21 11:00:00,2024-08-24 07:00:00,Proofreading,Catalan,English,5.3,206.6,Novus Group,Information Technology,Deadline
+220016,KMT,12000082,2024-08-22 15:00:00,2024-08-23 19:00:00,Post-Editing,Basque,Basque,5.8,262.6,SoftEcology,Information Technology,Quality
+220016,RMT,12000083,2024-08-23 09:00:00,2024-08-24 16:00:00,Post-Editing,Catalan,French,6.7,206.6,OptiMold Industries,Information Technology,Quality
+220016,SAB,12000084,2024-08-24 12:00:00,2024-08-27 05:00:00,Editing,Catalan,German,7.0,242.0,Cyclonic Manufacturing,Industrials,Price
+220017,JDM,12000085,2024-08-25 10:00:00,2024-08-26 15:00:00,Editing,Catalan,Italian,7.9,268.8,Vulcan High Council,Information Technology,Deadline
+220017,RPN,12000086,2024-08-26 10:00:00,2024-08-27 19:00:00,Translation,Catalan,English (US),6.5,253.5,SoftEcology,Information Technology,Quality
+220017,JDM,12000087,2024-08-27 09:00:00,2024-08-29 06:00:00,Post-Editing,Catalan,Galician,7.0,191.6,Meridian Industrial,Industrials,Quality
+220017,KMT,12000088,2024-08-28 13:00:00,2024-08-31 12:00:00,QA,Arabic,Spanish (Iberian),5.9,136.0,FluidMaster,Information Technology,Quality
+220017,KMT,12000089,2024-08-29 12:00:00,2024-09-01 01:00:00,Review,Basque,Spanish (Iberian),6.6,285.9,Radiant Ventures,Information Technology,Price
+220018,PMT,12000090,2024-08-30 12:00:00,2024-09-01 03:00:00,Review,Catalan,English (US),5.6,199.1,Industrial Innovations,Industrials,Quality
+220018,RMT,12000091,2024-08-31 16:00:00,2024-09-03 12:00:00,QA,Basque,Spanish (Global),6.5,235.7,FluidMaster,Information Technology,Quality
+220018,PMT,12000092,2024-09-01 09:00:00,2024-09-02 22:00:00,QA,Catalan,Spanish (Global),3.7,107.8,BioFabrica,Health Care,Quality
+220018,KMT,12000093,2024-09-02 09:00:00,2024-09-05 02:00:00,Proofreading,Arabic,Spanish (Iberian),5.0,170.3,ProdigySoft,Information Technology,Deadline
+220018,PMT,12000094,2024-09-03 12:00:00,2024-09-05 12:00:00,Translation,Catalan,French,6.3,312.2,echWorks Inc.,Information Technology,Price
+220019,SAB,12000095,2024-09-04 12:00:00,2024-09-06 05:00:00,Post-Editing,Catalan,English,4.7,159.5,GlobalTech Solutions,Information Technology,Deadline
+220019,BMT,12000096,2024-09-05 10:00:00,2024-09-06 18:00:00,Post-Editing,Catalan,French,4.4,81.3,Vulcan High Council,Information Technology,Deadline
+220019,BMT,12000097,2024-09-06 11:00:00,2024-09-07 14:00:00,Translation,Catalan,English (US),3.9,182.2,Vulcan High Council,Information Technology,Deadline
+220019,BMT,12000098,2024-09-07 10:00:00,2024-09-09 03:00:00,Editing,Catalan,Russian,7.6,269.7,SoftEcology,Information Technology,Quality
+220019,PMT,12000099,2024-09-08 11:00:00,2024-09-09 21:00:00,Proofreading,Catalan,French,5.6,130.7,ControlSoft,Information Technology,Quality

@@ -34,7 +34,7 @@ PATH_TRAIN_PARQUET = os.path.join(PATH_BASE_DIR, "train.parquet")
 PATH_VAL_PARQUET = os.path.join(PATH_BASE_DIR, "val.parquet")
 PATH_TEST_PARQUET = os.path.join(PATH_BASE_DIR, "test.parquet")
 
-# Project Modules
+# Project modules
 from src.utils.utils import *
 
 # Initialize logger

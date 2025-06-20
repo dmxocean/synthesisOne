@@ -1,0 +1,16 @@
+name: Synthesis
+channels:
+  - defaults
+  - conda-forge
+
+dependencies:
+  - pyyaml
+  - numpy
+  - pandas
+  - lightgbm
+  - python=3.10
+  - scikit-learn
+  - streamlit
+  - matplotlib
+  - ipykernel
+  - seaborn

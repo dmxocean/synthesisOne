@@ -1,5 +1,19 @@
 # Translation Tasks Optimizer
 
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Datasets and Data Analysis](#datasets-and-data-analysis)
+  - [Client Dataset](#client-dataset-clientscsv)
+  - [Translator Schedules Dataset](#translator-schedules-dataset-schedulescsv)
+  - [Translation Task History Dataset](#translation-task-history-dataset-datacsv)
+  - [Translator Cost Pairs Dataset](#translator-cost-pairs-dataset-translatorscostpairscsv)
+- [Installation Process](#installation-process)
+- [System Architecture](#system-architecture)
+- [Contributing](#contributing)
+
 ## Project Overview
 
 The Translation Tasks Optimizer is a system designed to solve the complex challenge of assigning translation tasks to translators. 
@@ -8,18 +22,70 @@ In the translation industry, project managers face the daily challenge of matchi
 
 This project offers a data-driven solution that automates and optimizes the task assignment process. By analyzing historical translation data, translator profiles, client requirements, and scheduling constraints, the system creates optimal matches that maximize overall quality and efficiency while minimizing costs.
 
-The core of the system leverages Constraint Satisfaction, Machine Learning, and Deep Learning approaches to identify optimal translator candidates for each task. These complementary technologies analyze historical performance data, language pair proficiency, and completion patterns to detect the most suitable translators while respecting schedule constraints and client requirements. 
+The core of the system leverages Constraint Satisfaction and Machine Learning approaches to identify optimal translator candidates for each task. These complementary technologies analyze historical performance data, language pair proficiency, and completion patterns to detect the most suitable translators while respecting schedule constraints and client requirements. 
 
 This approach not only improves operational efficiency but also enhances translator satisfaction through fairer workload distribution and client satisfaction through better quality outcomes.
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/dmxocean/synthesisOne
+cd synthesisOne
+
+# Create and activate conda environment
+conda env create -f environment.yml
+conda activate Synthesis
+
+# Run the main application
+python app/app.py
+```
+
+For detailed installation instructions, see [INSTALL.md](INSTALL.md).
 
 ## Project Structure
 
 ```
-❯ tree
 .
-
-TODO
-
+├── app/                    # Main application interface
+│   ├── app.py             # Streamlit web application
+│   ├── sampleLarge.csv    # Large sample dataset for testing
+│   └── sampleSmall.csv    # Small sample dataset for testing
+├── data/                  # Data directory
+│   ├── interim/           # Intermediate processed data
+│   │   ├── clients.csv
+│   │   ├── data.csv
+│   │   ├── schedules.csv
+│   │   └── translatorsCostPairs.csv
+│   ├── prediction/        # Prediction outputs
+│   │   └── translator_schedule.json
+│   ├── processed/         # Fully processed data
+│   │   ├── base/          # Base processed features
+│   │   └── ranking/       # Ranking model data
+│   └── raw/               # Raw unprocessed data
+│       └── data.xlsx
+├── models/                # Trained models
+│   ├── SAT/               # Constraint satisfaction models
+│   │   └── SAT.py
+│   └── ranking/           # Machine learning ranking models
+│       ├── lgbm_ranker_model.pkl
+│       └── metadata.json
+├── notebooks/             # Jupyter notebooks
+│   └── data_analysis.ipynb
+├── src/                   # Source code
+│   ├── data/              # Data processing modules
+│   ├── evaluation/        # Model evaluation
+│   ├── models/            # Model implementations
+│   ├── prediction/        # Prediction pipeline
+│   ├── preprocessing/     # Data preprocessing
+│   └── utils/             # Utility functions
+├── results/               # Experiment results
+├── logs/                  # Application logs
+├── info/                  # Project documentation
+├── deliveries/            # Project deliverables
+├── environment.yml        # Conda environment specification
+├── INSTALL.md             # Installation guide
+└── README.md              # This file
 ```
 
 ## Datasets and Data Analysis
@@ -151,25 +217,33 @@ Maps translators to language pairs with associated rates.
 
 ## Installation Process
 
-To set up the Translation Tasks Optimizer on your system, follow these steps:
+For detailed installation instructions, please refer to [INSTALL.md](INSTALL.md).
 
 ### Prerequisites
 * [Anaconda](https://www.anaconda.com/products/distribution) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) installed
 * Git
 
-### Setup Steps
+### Quick Setup
 ```bash
 # Clone the Repository
 git clone https://github.com/dmxocean/synthesisOne
 cd synthesisOne
 
-# Create Conda Environment
-conda create -n translationEnv python=3.10 -y
-# Activate Conda Environment
-conda activate translationEnv
+# Create Conda Environment from environment.yml
+conda env create -f environment.yml
 
-# Install Dependencies
-pip install -r requirements.txt
+# Activate Conda Environment
+conda activate Synthesis
 ```
 
-Upon completion of these steps, the system should be ready for use within the `translationEnv` conda environment. Any issues encountered during installation can be reported through the project's issue tracker.
+## System Architecture
+
+The Translation Tasks Optimizer employs a multi-layered architecture:
+
+1. **Data Layer**: Processes historical translation data and translator profiles
+2. **Preprocessing Layer**: Extracts features and prepares data for modeling
+3. **Model Layer**: 
+   - Constraint Satisfaction (SAT) for hard constraints
+   - Machine Learning (LightGBM) for quality prediction and ranking
+4. **Optimization Layer**: Combines model outputs to generate optimal assignments
+5. **Application Layer**: Streamlit interface for user interaction

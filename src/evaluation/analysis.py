@@ -119,8 +119,7 @@ def analyze_feature_importance(model, feature_names):
     plt.figure()
     bars = plt.bar(
         categories,
-        importances,
-        color='lightblue'
+        importances
     )
     plt.xlabel('Feature Category')
     plt.ylabel('Total Importance (Gain)')

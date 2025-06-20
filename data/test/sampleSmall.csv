@@ -1,0 +1,31 @@
+PROJECT_ID,PM,TASK_ID,START,END,TASK_TYPE,SOURCE_LANG,TARGET_LANG,FORECAST,COST,MANUFACTURER,MANUFACTURER_SECTOR,WILDCARD
+220000,SAB,12000000,2024-06-01 09:00:00,2024-06-04 06:00:00,Review,Basque,English,4.9,210.4,ModernPack,Information Technology,Price
+220000,KMT,12000001,2024-06-02 13:00:00,2024-06-05 08:00:00,Editing,Basque,Spanish (Global),4.9,222.0,MachinoTech,Information Technology,Price
+220000,RPN,12000002,2024-06-03 10:00:00,2024-06-04 13:00:00,Proofreading,Catalan,French,6.3,213.2,Vitality Industries,Information Technology,Price
+220000,BMT,12000003,2024-06-04 12:00:00,2024-06-06 18:00:00,Proofreading,Catalan,Russian,5.7,118.9,Solvtech,Information Technology,Price
+220000,RPN,12000004,2024-06-05 10:00:00,2024-06-06 15:00:00,Review,Basque,Spanish (Iberian),6.6,113.3,WebWelding,Information Technology,Deadline
+220001,SAB,12000005,2024-06-06 09:00:00,2024-06-09 03:00:00,Review,Catalan,English (UK),4.0,172.5,Vitality Industries,Information Technology,Price
+220001,JDM,12000006,2024-06-07 13:00:00,2024-06-08 16:00:00,Review,Catalan,Galician,5.7,170.6,Ironclad Industrial,Industrials,Quality
+220001,RMT,12000007,2024-06-08 12:00:00,2024-06-10 13:00:00,Proofreading,Basque,English,7.6,156.6,RentLeas,Information Technology,Quality
+220001,JDM,12000008,2024-06-09 16:00:00,2024-06-12 11:00:00,Proofreading,Catalan,Italian,4.3,70.3,GenoMachinex,Information Technology,Deadline
+220001,JDM,12000009,2024-06-10 14:00:00,2024-06-12 01:00:00,Translation,Basque,English,4.4,190.2,SkyLift,Information Technology,Quality
+220002,RPN,12000010,2024-06-11 13:00:00,2024-06-12 23:00:00,QA,Basque,Basque,4.8,154.0,Vitality Industries,Information Technology,Price
+220002,JDM,12000011,2024-06-12 16:00:00,2024-06-15 10:00:00,Post-Editing,Catalan,German,7.3,194.1,Steel for Good,Information Technology,Quality
+220002,RPN,12000012,2024-06-13 15:00:00,2024-06-15 22:00:00,Post-Editing,Arabic,Spanish (Iberian),1.3,22.1,Mechadynamics,Information Technology,Deadline
+220002,PMT,12000013,2024-06-14 10:00:00,2024-06-16 02:00:00,Editing,Catalan,Galician,1.3,38.5,Hammer & Hearth Diners Co.,Information Technology,Price
+220002,RMT,12000014,2024-06-15 14:00:00,2024-06-17 06:00:00,Editing,Catalan,English (UK),4.0,60.2,Solvtech,Information Technology,Price
+220003,KMT,12000015,2024-06-16 13:00:00,2024-06-19 01:00:00,Editing,Catalan,English,5.8,284.9,Mechadynamics,Information Technology,Deadline
+220003,SAB,12000016,2024-06-17 10:00:00,2024-06-18 13:00:00,Review,Catalan,Spanish (Global),5.6,137.4,MaquinaSoft,Information Technology,Deadline
+220003,BMT,12000017,2024-06-18 11:00:00,2024-06-19 22:00:00,QA,Catalan,Spanish (Global),7.1,308.9,Fusion Electricals,Energy,Price
+220003,RMT,12000018,2024-06-19 15:00:00,2024-06-20 16:00:00,Post-Editing,Catalan,Galician,2.5,93.2,ModernPack,Information Technology,Price
+220003,JDM,12000019,2024-06-20 15:00:00,2024-06-22 19:00:00,Review,Catalan,French,2.5,105.7,Softeach,Information Technology,Quality
+220004,PMT,12000020,2024-06-21 10:00:00,2024-06-24 06:00:00,Proofreading,Basque,Spanish (Global),5.3,249.3,SkyTrust,Information Technology,Quality
+220004,PMT,12000021,2024-06-22 11:00:00,2024-06-25 06:00:00,Post-Editing,Catalan,French,3.3,152.6,SkyTrust,Information Technology,Quality
+220004,PMT,12000022,2024-06-23 12:00:00,2024-06-26 04:00:00,Review,Basque,Spanish (Iberian),1.1,34.0,Ironclad Industrial,Industrials,Quality
+220004,BMT,12000023,2024-06-24 11:00:00,2024-06-26 04:00:00,Proofreading,Catalan,French,5.9,179.7,Spectra Dynamics,Information Technology,Price
+220004,RMT,12000024,2024-06-25 10:00:00,2024-06-27 06:00:00,Post-Editing,Basque,Spanish (Global),4.9,101.0,Helix Motors,Consumer Discretionary,Price
+220005,BMT,12000025,2024-06-26 14:00:00,2024-06-29 02:00:00,Review,Catalan,French,6.6,255.8,MachinoTech,Information Technology,Price
+220005,RPN,12000026,2024-06-27 15:00:00,2024-06-30 05:00:00,QA,Basque,English,1.5,65.5,Spectra Dynamics,Information Technology,Price
+220005,SAB,12000027,2024-06-28 12:00:00,2024-06-30 01:00:00,Editing,Catalan,Italian,6.7,174.6,Solvtech,Information Technology,Price
+220005,RPN,12000028,2024-06-29 13:00:00,2024-07-02 06:00:00,Review,Catalan,Italian,4.5,137.7,GenoMachinex,Information Technology,Deadline
+220005,JDM,12000029,2024-06-30 09:00:00,2024-07-01 16:00:00,QA,Arabic,Spanish (Iberian),6.4,139.2,WebWelding,Information Technology,Deadline

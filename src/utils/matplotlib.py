@@ -22,11 +22,14 @@ plt.rcParams.update({
     'legend.fontsize': 10,
     
     # Grid settings
-    'axes.grid': True,
+    'axes.grid': False,
     'grid.alpha': 0.5,
     'grid.linestyle': '--',
     
     # Layout
     'figure.autolayout': True,
     'figure.constrained_layout.use': True,
+    
+    # Professional color scheme
+    'axes.prop_cycle': plt.cycler('color', plt.cm.tab10.colors),
 })

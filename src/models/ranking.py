@@ -138,7 +138,7 @@ PARAM_GRIDS = {
     }
 }
 
-PERFORM_GRID_SEARCH = True  # Default grid search flag
+PERFORM_GRID_SEARCH = False  # Default grid search flag
 GRID_SIZE = "M"  # Default grid size for testing
 
 

@@ -1,7 +1,13 @@
 # src/prediction/ranking.py
 
 """
-Ranking-specific prediction functions for the LGBMRanker model
+Machine Learning Ranking Model for Translator Assignment System
+
+LGBMRanker-based translator recommendation and ranking inference
+Handles feature engineering, candidate generation, and model prediction
+Provides production-ready translator rankings for translation tasks
+
+IMPORTANT: Core ML component for data-driven translator selection
 """
 
 import os
@@ -31,7 +37,7 @@ PATH_MODEL_PKL = os.path.join(PATH_MODEL_DIR, "lgbm_ranker_model.pkl")
 PATH_RANKING_PROCESSED = os.path.join(PATH_ROOT, "data", "processed", "ranking")
 PATH_BASE_ARTIFACTS = os.path.join(PATH_ROOT, "data", "processed", "base", "artifacts")
 
-# Project Modules
+# Project modules
 from src.utils.utils import setup_logger, load_pickle, load_json
 from src.preprocessing.ranking import create_derived_features, engineer_ranking_features, generate_task_groups, check_language_capability
 from src.models.ranking import load_artifacts
@@ -229,21 +235,15 @@ def preprocess_for_inference(
     if encoders:
         for col, encoder in encoders.items():
             if col in df_features.columns:
-                try:
-                    df_features[f"{col}_ENCODED"] = encoder.transform(df_features[[col]])
-                    logger.debug(f"Encoded {col} using encoder")
-                    df_features = df_features.drop(col, axis=1)
-                except Exception as e:
-                    logger.warning(f"Error encoding {col}: {str(e)}")  # Encoding issue
+                df_features[f"{col}_ENCODED"] = encoder.transform(df_features[[col]])
+                logger.debug(f"Encoded {col} using encoder")
+                df_features = df_features.drop(col, axis=1)
 
     # Get feature columns used during training
     feature_columns = None
-    try:
-        feature_columns_path = os.path.join(PATH_RANKING_PROCESSED, "artifacts", "feature_columns.json")
-        if os.path.exists(feature_columns_path):
-            feature_columns = load_json(feature_columns_path)
-    except Exception as e:
-        logger.warning(f"Error loading feature columns: {str(e)}")  # Feature columns loading failed
+    feature_columns_path = os.path.join(PATH_RANKING_PROCESSED, "artifacts", "feature_columns.json")
+    if os.path.exists(feature_columns_path):
+        feature_columns = load_json(feature_columns_path)
 
     # Filter to match training columns if available
     if feature_columns:
@@ -255,6 +255,12 @@ def preprocess_for_inference(
             raise ValueError(f"Failed to generate required model features: {', '.join(missing_feature_columns)} ")
 
         df_features = df_features[available_columns]
+    
+    # WORKAROUND: The model was trained with TASK_ID as a feature (which is incorrect)
+    # We need to keep it but convert to numeric to avoid dtype error
+    if 'TASK_ID' in df_features.columns:
+        # Convert TASK_ID to numeric (just use row index as dummy value)
+        df_features['TASK_ID'] = range(len(df_features))
 
     logger.info(f"Preprocessed {len(df_features)} task-translator pairs for inference")
 
@@ -404,18 +410,13 @@ def run_inference(
         return {}
 
     # Generate predictions
-    try:
-        dict_results = predict_with_lgbm_ranker(
-            model,
-            X,
-            groups,
-            dict_task_translators,
-            list_task_ids,
-            top_k
-        )
-        logger.info(f"Inference completed for {len(dict_results)} tasks")
-        return dict_results
-
-    except Exception as e:
-        logger.error(f"Error in prediction: {str(e)}")  # Prediction failed
-        return {}
+    dict_results = predict_with_lgbm_ranker(
+        model,
+        X,
+        groups,
+        dict_task_translators,
+        list_task_ids,
+        top_k
+    )
+    logger.info(f"Inference completed for {len(dict_results)} tasks")
+    return dict_results

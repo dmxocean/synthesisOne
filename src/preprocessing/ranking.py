@@ -64,7 +64,7 @@ PATH_ENCODERS_PKL = os.path.join(PATH_ARTIFACTS_DIR, "encoders.pkl")
 PATH_FEATURE_COLUMNS_JSON = os.path.join(PATH_ARTIFACTS_DIR, "feature_columns.json")
 PATH_METADATA_JSON = os.path.join(PATH_ARTIFACTS_DIR, "metadata.json")
 
-# Project Modules
+# Project modules
 from src.utils.utils import *
 
 # Initialize logger

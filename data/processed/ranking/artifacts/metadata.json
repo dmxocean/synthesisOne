@@ -1,0 +1,42 @@
+{
+  "preprocessing_timestamp": "2025-05-14 17:49:08",
+  "num_train_samples": 9142675,
+  "num_val_samples": 1963840,
+  "num_test_samples": 1954365,
+  "num_train_groups": 371051,
+  "num_val_groups": 79511,
+  "num_test_groups": 79512,
+  "feature_count": 18,
+  "categorical_features": [
+    "SOURCE_LANG",
+    "TARGET_LANG",
+    "LANGUAGE_PAIR",
+    "TASK_TYPE",
+    "TRANSLATOR",
+    "MANUFACTURER",
+    "MANUFACTURER_SECTOR"
+  ],
+  "relevance_levels": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "task_ids_saved": true,
+  "unique_tasks_count": {
+    "train": 371051,
+    "val": 79511,
+    "test": 79512
+  },
+  "group_composition": {
+    "capable_translators_percentage": 0.5,
+    "incapable_translators_percentage": 0.5,
+    "strong_matches_percentage": 0.3,
+    "basic_matches_percentage": 0.7
+  },
+  "group_sizes": {
+    "common_language_pair": 25,
+    "medium_language_pair": 10,
+    "rare_language_pair": 5
+  }
+}

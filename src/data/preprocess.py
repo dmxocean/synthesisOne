@@ -3,10 +3,10 @@
 """
 Data Preprocessing Pipeline for Translator Assignment System
 
-Converts raw Excel data into clean CSV files for ranking model pipeline.
-Validates translator assignments and normalizes data formats.
+Converts raw Excel data into clean CSV files for ranking model pipeline
+Validates translator assignments and normalizes data formats
 
-IMPORTANT: Enforces PRIMORDIAL RULE that only translators in cost pairs sheet are valid.
+IMPORTANT: Enforces PRIMORDIAL RULE that only translators in cost pairs sheet are valid
 """
 
 import os

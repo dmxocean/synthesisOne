@@ -1,6 +1,7 @@
 """
 JSON Queries Module for Translation Project Data
 This module provides functions to query all JSON files in ./data/processed/base/artifacts/
+
 There are too many functions, just everything I could come up with, add more if you need anything else
 """
 
@@ -8,7 +9,6 @@ import json
 import os
 import pandas as pd
 import numpy as np
-from pathlib import Path
 from typing import List, Optional, Any
 from datetime import datetime
 
@@ -50,20 +50,20 @@ SORT_BY_COST = 'avg_cost'
 SORT_BY_FORECAST = 'avg_forecast'
 
 # Default directory constant
-DEFAULT_ARTIFACTS_DIR = (Path(__file__).absolute().parent.parent.parent / "data/processed/base/artifacts").__str__()
+DEFAULT_ARTIFACTS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "processed", "base", "artifacts")
 
 
 class JSONQueryHandler:
     """Main class for handling JSON queries across all artifact files"""
     
     def __init__(self, artifacts_dir: str = DEFAULT_ARTIFACTS_DIR):
-        self.artifacts_dir = Path(artifacts_dir)
+        self.artifacts_dir = artifacts_dir
         self._cache = {}
     
     def _load_json(self, filename: str) -> dict:
         """Load JSON file with caching"""
         if filename not in self._cache:
-            file_path = self.artifacts_dir / filename
+            file_path = os.path.join(self.artifacts_dir, filename)
             with open(file_path, 'r', encoding='utf-8') as f:
                 self._cache[filename] = json.load(f)
         return self._cache[filename]
